@@ -1,37 +1,16 @@
-lennuplaan kõikide lendudega
-filtrid nt:
-sihtkoht
-kuupäev
-lennuaeg
-hind
+mõtlen, et kuidas toimida, kas genereerida ise Faker library abil nt 100 lendu,
+kas lähetekoht jääb alati samaks? kui ei jää ja kasutada paljusid lennujaamasid,
+siis võib vähe valikuid tekkida kliendi jaoks kui üldse
 
-Mõtted: oleks vaja lendude jaoks entity teha nt nimega Flight, anda talle erinevad vajalikud
-lennu detailid juurde nagu sihtkoht, lähtekoht, kuupäev, millal alustab sõitu, kuupäev millal
-lõpetab sõidu, lennuaeg, millal alustab sõitu, lennuaeg, millal kohale jõuab, pilethind jne
+1) kas lähtekoht jääb samaks, või teeb nii, et klient saab ka lähtekohta muuta?
+2) kui sihtkohti on liiga palju ja genereerida nt 100 lendu, siis ei pruugi ka lendusid olla
+kliendi jaoks
+3) kui ma laseks kliendil ise sisestada oma soovitud sihtkohta ja seda ei eksisteeri,
+kuidas app kasutajale teada annab, et on nt olemas teine valik? esimene mõte oleks, et
+esimese tähe sisestamisel, pakuks app koheselt drop-down menüüs teatud valikuid
+4) kuidas läheneda sellele ülesandele? kas tehagi ainult nt 4-5 lennujaama jaoks lendusid
+ja siis drop-down menüü-s saaks kasutaja täpselt valida nende vahel, kuhu minna tahab või
+peaks kohe proovima kasutada mingi lennufirma API-t, ei peaks ise lendusid genereerima,
+valim oleks palju suurem
 
-erinevate lendude andmed tahaks databaasi salvestada, lendude andmed võiks hiljem genereerida
-läbi scripti nt faker library abil, tahaks dto-sid teha, millega spetsiifilisi andmeid fetch-ida
-frontend-is, oleks turvalisem, vaja siis ka mapper teha, mis seostaks lendude entity file-i
-dto-dega.
-
-
-istekohtade soovitamine pärast lennu valimist
-
-soovitused tuleb kuvada lennuki istekohtade plaanil
-lennuki suuruse ja istmete konfiguratsiooni saab vabalt valida
-juba hõivatud kohad võiksid olla genereeritud
-filtrid:
-istekoht akna all
-rohkem jala ruumi
-lähedal väljapääsule
-istekohad kõrvuti kui ostetakse mitu piletit
-
-istekohtade jaoks tahaks sarnaselt käituda ja teha entity file nt nimega Seats
-võiks olla detailid nagu isNextToWindow, hasFootSpace, nearExit, isTaken, hasFreeSeatNextToIt
-
-mõlema entity jaoks tahaks vastavalt ka service, controller, repo failid teha
-
-
-frontendis oleks vb huvitav figma kasutada, et disainida, aga pole veel 100% kindel
-
-mõtleb veel edasi
+proovin praegu lennufirma API-sid kasutada
