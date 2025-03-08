@@ -13,16 +13,25 @@ public class Flight {
     private Integer id;
 
     private String name;
+
+    @Column(name = "starting_location")
     private String startingLocation;
+
     private String destination;
     private double price;
+
+    @Column(name = "starting_date_time", columnDefinition = "TIMESTAMPTZ")
     private ZonedDateTime startingDateTime;
+
+    @Column(name = "arrival_date_time", columnDefinition = "TIMESTAMPTZ")
     private ZonedDateTime arrivalDateTime;
-    private Duration duration;
+
+    @Column(name = "duration")
+    private Integer duration;
 
     public Flight() {}
 
-    public Flight(Integer id, String name, String startingLocation, String destination, double price, ZonedDateTime startingDateTime, ZonedDateTime arrivalDateTime, Duration duration) {
+    public Flight(Integer id, String name, String startingLocation, String destination, double price, ZonedDateTime startingDateTime, ZonedDateTime arrivalDateTime, Integer duration) {
         this.id = id;
         this.name = name;
         this.startingLocation = startingLocation;
@@ -74,10 +83,10 @@ public class Flight {
     public void setArrivalDateTime(ZonedDateTime arrivalDateTime) {
         this.arrivalDateTime = arrivalDateTime;
     }
-    public Duration getDuration() {
+    public Integer getDuration() {
         return duration;
     }
-    public void setDuration(Duration duration) {
+    public void setDuration(Integer duration) {
         this.duration = duration;
     }
 }
