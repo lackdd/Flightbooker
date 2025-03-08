@@ -1,33 +1,33 @@
-import { useState } from 'react'
+import {useEffect, useState} from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import axios from "axios";
 
 function App() {
-  const [count, setCount] = useState(0)
+
+    const [flights, setFlights] = useState([]);
+
+    useEffect (() => {
+        const fetchFlights = async () => {
+            try {
+                const response = await axios.get("http://localhost:8080/api/flights")
+                setFlights(response.data);
+            } catch (error) {
+                console.log(error.message);
+            }
+        }
+        fetchFlights();
+    }, [])
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+        <h1>Teretulemast Flightbooki! Palun plaanige oma lennuplaan.</h1>
+
+        <p>Palun sisestage Lennujaam, kust lennata tahate.</p>
+        {
+        flights.map(f => <p key={f.id}>{f.name}</p>
+        )}
     </>
   )
 }
