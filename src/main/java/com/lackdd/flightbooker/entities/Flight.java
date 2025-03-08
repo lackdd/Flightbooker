@@ -10,7 +10,7 @@ public class Flight {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     private String name;
     private String startingLocation;
@@ -22,7 +22,8 @@ public class Flight {
 
     public Flight() {}
 
-    public Flight(String name, String startingLocation, String destination, double price, ZonedDateTime startingDateTime, ZonedDateTime arrivalDateTime, Duration duration) {
+    public Flight(Integer id, String name, String startingLocation, String destination, double price, ZonedDateTime startingDateTime, ZonedDateTime arrivalDateTime, Duration duration) {
+        this.id = id;
         this.name = name;
         this.startingLocation = startingLocation;
         this.destination = destination;
@@ -31,7 +32,12 @@ public class Flight {
         this.arrivalDateTime = arrivalDateTime;
         this.duration = duration;
     }
-
+    public Integer getId() {
+        return id;
+    }
+    public void setId(Integer id) {
+        this.id = id;
+    }
     public String getName() {
         return name;
     }
