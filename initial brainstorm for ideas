@@ -1,0 +1,37 @@
+lennuplaan kõikide lendudega
+filtrid nt:
+sihtkoht
+kuupäev
+lennuaeg
+hind
+
+Mõtted: oleks vaja lendude jaoks entity teha nt nimega Flight, anda talle erinevad vajalikud
+lennu detailid juurde nagu sihtkoht, lähtekoht, kuupäev, millal alustab sõitu, kuupäev millal
+lõpetab sõidu, lennuaeg, millal alustab sõitu, lennuaeg, millal kohale jõuab, pilethind jne
+
+erinevate lendude andmed tahaks databaasi salvestada, lendude andmed võiks hiljem genereerida
+läbi scripti nt faker library abil, tahaks dto-sid teha, millega spetsiifilisi andmeid fetch-ida
+frontend-is, oleks turvalisem, vaja siis ka mapper teha, mis seostaks lendude entity file-i
+dto-dega.
+
+
+istekohtade soovitamine pärast lennu valimist
+
+soovitused tuleb kuvada lennuki istekohtade plaanil
+lennuki suuruse ja istmete konfiguratsiooni saab vabalt valida
+juba hõivatud kohad võiksid olla genereeritud
+filtrid:
+istekoht akna all
+rohkem jala ruumi
+lähedal väljapääsule
+istekohad kõrvuti kui ostetakse mitu piletit
+
+istekohtade jaoks tahaks sarnaselt käituda ja teha entity file nt nimega Seats
+võiks olla detailid nagu isNextToWindow, hasFootSpace, nearExit, isTaken, hasFreeSeatNextToIt
+
+mõlema entity jaoks tahaks vastavalt ka service, controller, repo failid teha
+
+
+frontendis oleks vb huvitav figma kasutada, et disainida, aga pole veel 100% kindel
+
+mõtleb veel edasi
