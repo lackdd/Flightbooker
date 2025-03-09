@@ -1,46 +1,16 @@
-import {useEffect, useState} from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-import axios from "axios";
+import FlightSchedule from "./components/FlightSchedule.jsx";
+import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 
 function App() {
 
-    const [flights, setFlights] = useState([]);
-
-    useEffect (() => {
-        const fetchFlights = async () => {
-            try {
-                const response = await axios.get("http://localhost:8080/api/flights")
-                setFlights(response.data);
-                //console.log(response.data);
-            } catch (error) {
-                console.log(error.message);
-            }
-        }
-        fetchFlights();
-    }, [])
-
   return (
-    <>
-        <h1>Teretulemast Flightbooki! Palun plaanige oma lennuplaan.</h1>
-        {
-        flights.map(f => <p key={f.id}>{[
-            f.flightNumber,
-            f.startingLocation,
-            f.startingLocationCity,
-            f.startingLocationCountry,
-            f.startingLocationIATA,
-            f.destination,
-            f.destinationCity,
-            f.destinationCountry,
-            f.destinationIATA,
-            f.startingDateTime,
-            f.arrivalDateTime,
-            f.price
-            ].join(" | ")}</p>
-        )}
-    </>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Navigate to="/schedule" replace />} />
+                <Route path="/schedule" element={<FlightSchedule />} />
+            </Routes>
+        </BrowserRouter>
   )
 }
 
