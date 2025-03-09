@@ -80,6 +80,11 @@ public class FlightSeeder implements CommandLineRunner {
     @Override
     public void run(String...args) {
 
+        if (repo.count() > 0) {
+            System.out.println("Database already has data, stopping sample data generation.");
+            return;
+        }
+
         List<Flight> flights = new ArrayList<>();
 
         for(int i = 0; i < 100; i++) {
