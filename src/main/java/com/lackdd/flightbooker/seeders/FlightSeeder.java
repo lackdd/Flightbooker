@@ -4,11 +4,73 @@ import com.lackdd.flightbooker.repositories.FlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+import java.time.ZoneId;
+
 @Component
 public class FlightSeeder {
 
     @Autowired
     private FlightRepository repo;
+
+    private static final Random random = new Random();
+
+    public String randomFlightNumber() {
+        int rand = random.nextInt(100, 200);
+        String flightNumber = "BT" + rand;
+        return flightNumber;
+    }
+
+    public double randomPrice() {
+        double rand = random.nextDouble(100, 1000);
+        return rand;
+    }
+
+    private class DestinationDetails {
+        String destination;
+        String destinationCity;
+        String destinationCountry;
+        String destinationIATA;
+
+        private DestinationDetails(String destination, String destinationCity, String destinationCountry, String destinationIATA) {
+            this.destination = destination;
+            this.destinationCity = destinationCity;
+            this.destinationCountry = destinationCountry;
+            this.destinationIATA = destinationIATA;
+        }
+    }
+
+    private final List<DestinationDetails> destinationDetailsList = new ArrayList<>(Arrays.asList(
+    new DestinationDetails("Hartsfield-Jackson Atlanta International Airport", "Atlanta", "United States", "ATL"),
+        new DestinationDetails("Beijing Capital International Airport", "Beijing", "China", "PEK"),
+        new DestinationDetails("Heathrow Airport", "London", "United Kingdom", "LHR"),
+        new DestinationDetails("Tokyo Haneda Airport", "Tokyo", "Japan", "HND"),
+        new DestinationDetails("Los Angeles International Airport", "Los Angeles", "United States", "LAX"),
+        new DestinationDetails("Dubai International Airport", "Dubai", "United Arab Emirates", "DXB"),
+        new DestinationDetails("Paris Charles de Gaulle Airport", "Paris", "France", "CDG"),
+        new DestinationDetails("Frankfurt Airport", "Frankfurt", "Germany", "FRA"),
+        new DestinationDetails("Singapore Changi Airport", "Singapore", "Singapore", "SIN"),
+        new DestinationDetails("Sydney Kingsford Smith Airport", "Sydney", "Australia", "SYD")
+        ));
+
+    public DestinationDetails randomDestinationDetails(List<DestinationDetails> destinationDetailsList) {
+        int rand = random.nextInt(10);
+        return destinationDetailsList.get(rand);
+    }
+
+    public ZonedDateTime randomStartingDateTime() {
+        int randomDays = random.nextInt(10, 20);
+        int randomHours = random.nextInt(0, 24);
+        List<Integer> minutesList = new ArrayList<>(Arrays.asList(
+                0, 10, 20, 30, 40, 50
+        ));
+        int randomMinutes = minutesList.get(random.nextInt(minutesList.size()));
+        return ZonedDateTime.of(2025, 3, randomDays, randomHours, randomMinutes, 0, 0, ZoneId.of("Europe/Tallinn"));
+    }
 
     /* initialize faker
      initializer random

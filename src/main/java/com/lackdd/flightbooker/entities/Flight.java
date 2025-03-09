@@ -96,13 +96,13 @@ public class Flight {
         return startingDateTime;
     }
     public void setStartingDateTime(ZonedDateTime startingDateTime) {
-        this.startingDateTime = startingDateTime;
+        this.startingDateTime = startingDateTime.withZoneSameInstant(ZoneOffset.UTC);
     }
     public ZonedDateTime getArrivalDateTime() {
         return arrivalDateTime;
     }
     public void setArrivalDateTime(ZonedDateTime arrivalDateTime) {
-        this.arrivalDateTime = arrivalDateTime;
+        this.arrivalDateTime = arrivalDateTime.withZoneSameInstant(ZoneOffset.UTC);
     }
     public Integer getDuration() {
         return duration;
