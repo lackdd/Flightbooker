@@ -29,7 +29,7 @@ public class FlightSeeder implements CommandLineRunner {
 
     public double randomPrice() {
         double rand = random.nextDouble(100, 1000);
-        return rand;
+        return Math.round(rand * 10.0) / 10.0;
     }
 
     private class DestinationDetails {

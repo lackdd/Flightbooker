@@ -13,6 +13,7 @@ function App() {
             try {
                 const response = await axios.get("http://localhost:8080/api/flights")
                 setFlights(response.data);
+                //console.log(response.data);
             } catch (error) {
                 console.log(error.message);
             }
@@ -23,10 +24,21 @@ function App() {
   return (
     <>
         <h1>Teretulemast Flightbooki! Palun plaanige oma lennuplaan.</h1>
-
-        <p>Palun sisestage Lennujaam, kust lennata tahate.</p>
         {
-        flights.map(f => <p key={f.id}>{f.name}</p>
+        flights.map(f => <p key={f.id}>{[
+            f.flightNumber,
+            f.startingLocation,
+            f.startingLocationCity,
+            f.startingLocationCountry,
+            f.startingLocationIATA,
+            f.destination,
+            f.destinationCity,
+            f.destinationCountry,
+            f.destinationIATA,
+            f.startingDateTime,
+            f.arrivalDateTime,
+            f.price
+            ].join(" | ")}</p>
         )}
     </>
   )
