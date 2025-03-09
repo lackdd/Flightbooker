@@ -14,3 +14,13 @@ peaks kohe proovima kasutada mingi lennufirma API-t, ei peaks ise lendusid gener
 valim oleks palju suurem
 
 proovin praegu lennufirma API-sid kasutada
+
+update: uurisin erinevaid lennufirma api-sid ja parimal juhul saan 100 api requesti kuus
+kui ma frontendis nt seaksin üles input fieldi, mis debouncimise abil sööks 1 requesti ära,
+ja mul oleks input field lähtekoha, sihtkoha, piletihinna, erinevate kalendri kuupäeva
+valimiseks, kellaaja valimiseks, sööksin ma testides api limiidist suht kähku läbi
+ei usu, et cache-imine ka palju aitaks siin
+
+seega pigem mõtlen ikkagi oma enda versiooni välja, ma mõtlesin, et paneks lähtekoha jaoks
+lahtri, aga seal oleks valikus ainult Tallinna lennujaam, ja sihtkohtasid võiks olla nt
+10 erineva valiku vahel ja genereeriks scripti abil nt 300 lendu, vb rohkem
