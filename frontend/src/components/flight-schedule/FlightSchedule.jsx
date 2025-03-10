@@ -9,6 +9,7 @@ import {
     useReactTable
 } from '@tanstack/react-table'
 import "./FlightSchedule.css";
+import {useNavigate} from "react-router-dom";
 
 
 const columnHelper = createColumnHelper();
@@ -129,6 +130,8 @@ function FlightSchedule() {
     const [sorting, setSorting] = useState([]);
     const [columnFilters, setColumnFilters] = useState([]);
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         const fetchFlights = async () => {
             try {
@@ -212,7 +215,10 @@ function FlightSchedule() {
                 </thead>
                 <tbody>
                 {table.getRowModel().rows.map(row => (
-                    <tr key={row.id}>
+                    <tr
+                        key={row.id}
+                        onClick={() => navigate(`/seats/${row.original.id}`, { state: { flight: row.original } })}
+                    >
                         {row.getVisibleCells().map(cell => (
                             <td key={cell.id}>
                                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
