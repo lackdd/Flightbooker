@@ -78,3 +78,15 @@ tbody td {
 tbody td:hover:before {
     background-color: rgba(255, 255, 255, 0.2);
 }
+
+.filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.filters input {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}

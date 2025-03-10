@@ -1,6 +1,13 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {createColumnHelper, flexRender, getCoreRowModel, getSortedRowModel, useReactTable} from '@tanstack/react-table'
+import {
+    createColumnHelper,
+    flexRender,
+    getCoreRowModel,
+    getFilteredRowModel,
+    getSortedRowModel,
+    useReactTable
+} from '@tanstack/react-table'
 import "./FlightSchedule.css";
 
 
@@ -15,11 +22,8 @@ const columns = [
     columnHelper.accessor(row => row.startingLocation, {
         id: 'startingLocation',
         cell: info => info.getValue(),
-        header: ({ column }) => (
-            <button onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                Starting Location {column.getIsSorted() === "asc" ? "🔼" : column.getIsSorted() === "desc" ? "🔽" : ""}
-            </button>
-        ),
+        header: () => 'Starting Location',
+        filterFn: "includesString",
     }),
 /*    columnHelper.accessor('startingLocationCity', {
         header: () => 'Starting Location City',
@@ -43,6 +47,7 @@ const columns = [
             </button>
         ),
         cell: info => info.getValue(),
+        filterFn: "includesString",
     }),
 /*    columnHelper.accessor('destinationCity', {
         header: () => 'Destination City',
@@ -66,6 +71,7 @@ const columns = [
             </button>
         ),
         cell: info => info.getValue(),
+        filterFn: "includesString",
     }),
     columnHelper.accessor('arrivalDateTime', {
         header: ({column}) => (
@@ -74,6 +80,7 @@ const columns = [
             </button>
         ),
         cell: info => info.getValue(),
+        filterFn: "includesString",
     }),
     columnHelper.accessor('duration', {
         header: ({column}) => (
@@ -82,6 +89,7 @@ const columns = [
             </button>
         ),
         cell: info => info.getValue(),
+        filterFn: "includesString",
     }),
     columnHelper.accessor('price', {
         header: ({column}) => (
@@ -90,6 +98,11 @@ const columns = [
             </button>
         ),
         cell: info => info.getValue() + "€",
+        filterFn: (row, columnId, value) => {
+            // only filter if value is defined
+            if (!value) return true;
+            return row.getValue(columnId) <= value;
+        },
     }),
 ];
 
@@ -114,6 +127,7 @@ function formatDuration(duration) {
 function FlightSchedule() {
     const [flights, setFlights] = useState([]);
     const [sorting, setSorting] = useState([]);
+    const [columnFilters, setColumnFilters] = useState([]);
 
     useEffect(() => {
         const fetchFlights = async () => {
@@ -139,13 +153,45 @@ function FlightSchedule() {
         columns,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
-        state: { sorting },
+        getFilteredRowModel: getFilteredRowModel(),
+        state: { sorting, columnFilters },
         onSortingChange: setSorting,
-    })
+        onColumnFiltersChange: setColumnFilters,
+    });
 
     return (
         <div className="page-container">
             <h1>Teretulemast Flightbooki! Palun plaanige oma lennuplaan.</h1>
+            <div className="filters">
+                <input
+                    type="text"
+                    placeholder="Search Destination"
+                    onChange={(e) => table.getColumn("destination")?.setFilterValue(e.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="Starting Date and Time"
+                    onChange={(e) => table.getColumn("startingDateTime")?.setFilterValue(e.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="Arrival Date and Time"
+                    onChange={(e) => table.getColumn("arrivalDateTime")?.setFilterValue(e.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="Duration"
+                    onChange={(e) => table.getColumn("duration")?.setFilterValue(e.target.value)}
+                />
+                <input
+                    type="number"
+                    placeholder="Max Price (€)"
+                    onChange={(e) => {
+                        const value = e.target.value ? parseFloat(e.target.value) : undefined;
+                        table.getColumn("price")?.setFilterValue(value);
+                    }}
+                />
+            </div>
             <div className="container">
             <table>
                 <thead>
