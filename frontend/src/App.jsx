@@ -1,5 +1,5 @@
 import './App.css'
-import FlightSchedule from "./components/FlightSchedule.jsx";
+import FlightSchedule from "./components/flight-schedule/FlightSchedule.jsx";
 import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 
 function App() {

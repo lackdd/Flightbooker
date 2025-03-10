@@ -1,21 +1,21 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {createColumnHelper, flexRender, getCoreRowModel, useReactTable} from '@tanstack/react-table'
+import "./FlightSchedule.css";
 
 
 const columnHelper = createColumnHelper();
 
 const columns = [
-    columnHelper.accessor('flightNumber', {
+    /*columnHelper.accessor('flightNumber', {
         cell: info => info.getValue(),
         header: () => 'Flight Number',
         footer: info => info.column.id,
-    }),
+    }),*/
     columnHelper.accessor(row => row.startingLocation, {
         id: 'startingLocation',
         cell: info => info.getValue(),
         header: () => 'Starting Location',
-        footer: info => info.column.id,
     }),
 /*    columnHelper.accessor('startingLocationCity', {
         header: () => 'Starting Location City',
@@ -35,7 +35,6 @@ const columns = [
     columnHelper.accessor('destination', {
         header: () => 'Destination',
         cell: info => info.getValue(),
-        footer: info => info.column.id,
     }),
 /*    columnHelper.accessor('destinationCity', {
         header: () => 'Destination City',
@@ -52,27 +51,41 @@ const columns = [
         cell: info => info.getValue(),
         footer: info => info.column.id,
     }),*/
-    columnHelper.accessor('price', {
-        header: () => 'Price',
-        cell: info => info.getValue(),
-        footer: info => info.column.id,
-    }),
     columnHelper.accessor('startingDateTime', {
         header: () => 'Starting Date and Time',
         cell: info => info.getValue(),
-        footer: info => info.column.id,
     }),
     columnHelper.accessor('arrivalDateTime', {
         header: () => 'Arrival Date and Time',
         cell: info => info.getValue(),
-        footer: info => info.column.id,
     }),
     columnHelper.accessor('duration', {
         header: () => 'Duration',
         cell: info => info.getValue(),
-        footer: info => info.column.id,
+    }),
+    columnHelper.accessor('price', {
+        header: () => 'Price',
+        cell: info => info.getValue() + "€",
     }),
 ];
+
+function formatDateTime(isoString) {
+    const date = new Date(isoString);
+    return new Intl.DateTimeFormat("en-GB", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        timeZoneName: "short"
+    }).format(date);
+}
+
+function formatDuration(duration) {
+    let hours = Math.round(duration / 60);
+    let minutes = duration % 60;
+    return `${hours > 0 ? hours + " Hours " : ""}${minutes > 0 ? minutes + " Minutes" : ""}`.trim();
+}
 
 function FlightSchedule() {
     const [flights, setFlights] = useState([]);
@@ -81,7 +94,13 @@ function FlightSchedule() {
         const fetchFlights = async () => {
             try {
                 const response = await axios.get("http://localhost:8080/api/flights")
-                setFlights(response.data);
+                const formattedFlights = response.data.map(f => ({
+                    ...f,
+                    startingDateTime: formatDateTime(f.startingDateTime),
+                    arrivalDateTime: formatDateTime(f.arrivalDateTime),
+                    duration: formatDuration(f.duration)
+                }));
+                setFlights(formattedFlights);
                 //console.log(response.data);
             } catch (error) {
                 console.log(error.message);
@@ -97,8 +116,9 @@ function FlightSchedule() {
     })
 
     return (
-        <>
+        <div className="page-container">
             <h1>Teretulemast Flightbooki! Palun plaanige oma lennuplaan.</h1>
+            <div className="container">
             <table>
                 <thead>
                 {table.getHeaderGroups().map(headerGroup => (
@@ -144,7 +164,8 @@ function FlightSchedule() {
                 ))}
                 </tfoot>
             </table>
-        </>
+            </div>
+        </div>
     );
 }
 
