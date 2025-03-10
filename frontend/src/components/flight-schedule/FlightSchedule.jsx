@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {createColumnHelper, flexRender, getCoreRowModel, useReactTable} from '@tanstack/react-table'
+import {createColumnHelper, flexRender, getCoreRowModel, getSortedRowModel, useReactTable} from '@tanstack/react-table'
 import "./FlightSchedule.css";
 
 
@@ -15,7 +15,11 @@ const columns = [
     columnHelper.accessor(row => row.startingLocation, {
         id: 'startingLocation',
         cell: info => info.getValue(),
-        header: () => 'Starting Location',
+        header: ({ column }) => (
+            <button onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                Starting Location {column.getIsSorted() === "asc" ? "🔼" : column.getIsSorted() === "desc" ? "🔽" : ""}
+            </button>
+        ),
     }),
 /*    columnHelper.accessor('startingLocationCity', {
         header: () => 'Starting Location City',
@@ -33,7 +37,11 @@ const columns = [
         footer: info => info.column.id,
     }),*/
     columnHelper.accessor('destination', {
-        header: () => 'Destination',
+        header: ({column}) => (
+            <button onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                Destination {column.getIsSorted() === "asc" ? "🔼" : column.getIsSorted() === "desc" ? "🔽" : ""}
+            </button>
+        ),
         cell: info => info.getValue(),
     }),
 /*    columnHelper.accessor('destinationCity', {
@@ -52,19 +60,35 @@ const columns = [
         footer: info => info.column.id,
     }),*/
     columnHelper.accessor('startingDateTime', {
-        header: () => 'Starting Date and Time',
+        header: ({column}) => (
+            <button onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                Starting Date and Time {column.getIsSorted() === "asc" ? "🔼" : column.getIsSorted() === "desc" ? "🔽" : ""}
+            </button>
+        ),
         cell: info => info.getValue(),
     }),
     columnHelper.accessor('arrivalDateTime', {
-        header: () => 'Arrival Date and Time',
+        header: ({column}) => (
+            <button onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                Arrival Date and Time {column.getIsSorted() === "asc" ? "🔼" : column.getIsSorted() === "desc" ? "🔽" : ""}
+            </button>
+        ),
         cell: info => info.getValue(),
     }),
     columnHelper.accessor('duration', {
-        header: () => 'Duration',
+        header: ({column}) => (
+            <button onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                Duration {column.getIsSorted() === "asc" ? "🔼" : column.getIsSorted() === "desc" ? "🔽" : ""}
+            </button>
+        ),
         cell: info => info.getValue(),
     }),
     columnHelper.accessor('price', {
-        header: () => 'Price',
+        header: ({column}) => (
+            <button onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                Price {column.getIsSorted === "asc" ? "🔼" : column.getIsSorted() === "desc" ? "🔽" : ""}
+            </button>
+        ),
         cell: info => info.getValue() + "€",
     }),
 ];
@@ -89,6 +113,7 @@ function formatDuration(duration) {
 
 function FlightSchedule() {
     const [flights, setFlights] = useState([]);
+    const [sorting, setSorting] = useState([]);
 
     useEffect(() => {
         const fetchFlights = async () => {
@@ -105,14 +130,17 @@ function FlightSchedule() {
             } catch (error) {
                 console.log(error.message);
             }
-        }
+        };
         fetchFlights();
-    }, [])
+    }, []);
 
     const table = useReactTable({
         data: flights,
         columns,
         getCoreRowModel: getCoreRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        state: { sorting },
+        onSortingChange: setSorting,
     })
 
     return (
