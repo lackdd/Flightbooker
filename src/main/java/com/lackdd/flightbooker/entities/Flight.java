@@ -3,6 +3,8 @@ package com.lackdd.flightbooker.entities;
 import jakarta.persistence.*;
 
 import java.time.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "flights")
@@ -49,23 +51,27 @@ public class Flight {
     @Column(name = "duration")
     private Integer duration;
 
+    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FlightSeat> seats = new ArrayList<>();
+
     public Flight() {}
 
-    public Flight(Integer id, String flightNumber, String startingLocation, String startingLocationCity, String startingLocationIATA, String startingLocationCountry, String destination, String destinationCountry, String destinationCity, double price, String destinationIATA, ZonedDateTime arrivalDateTime, ZonedDateTime startingDateTime, Integer duration) {
+    public Flight(Integer id, String startingLocation, String flightNumber, String startingLocationCity, String startingLocationCountry, String destination, String destinationCity, String startingLocationIATA, String destinationIATA, String destinationCountry, double price, ZonedDateTime startingDateTime, ZonedDateTime arrivalDateTime, Integer duration, List<FlightSeat> seats) {
         this.id = id;
-        this.flightNumber = flightNumber;
         this.startingLocation = startingLocation;
+        this.flightNumber = flightNumber;
         this.startingLocationCity = startingLocationCity;
-        this.startingLocationIATA = startingLocationIATA;
         this.startingLocationCountry = startingLocationCountry;
         this.destination = destination;
-        this.destinationCountry = destinationCountry;
         this.destinationCity = destinationCity;
-        this.price = price;
+        this.startingLocationIATA = startingLocationIATA;
         this.destinationIATA = destinationIATA;
-        this.arrivalDateTime = arrivalDateTime;
+        this.destinationCountry = destinationCountry;
+        this.price = price;
         this.startingDateTime = startingDateTime;
+        this.arrivalDateTime = arrivalDateTime;
         this.duration = duration;
+        this.seats = seats;
     }
 
     public Integer getId() {
@@ -165,5 +171,13 @@ public class Flight {
 
     public void setDestinationIATA(String destinationIATA) {
         this.destinationIATA = destinationIATA;
+    }
+
+    public List<FlightSeat> getSeats() {
+        return seats;
+    }
+
+    public void setSeats(List<FlightSeat> seats) {
+        this.seats = seats;
     }
 }

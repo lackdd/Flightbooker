@@ -2,6 +2,7 @@ package com.lackdd.flightbooker.seeders;
 
 import com.lackdd.flightbooker.entities.Flight;
 import com.lackdd.flightbooker.repositories.FlightRepository;
+import com.lackdd.flightbooker.repositories.FlightSeatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,9 @@ public class FlightSeeder implements CommandLineRunner {
 
     @Autowired
     private FlightRepository repo;
+
+    @Autowired
+    private FlightSeatRepository seatRepo;
 
     private static final Random random = new Random();
 
