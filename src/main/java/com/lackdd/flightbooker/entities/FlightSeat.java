@@ -59,20 +59,20 @@ public class FlightSeat {
         this.occupied = occupied;
     }
 
-    public boolean isNearWindow() {
-        return nearWindow;
-    }
-
-    public void setNearWindow(boolean nearWindow) {
-        this.nearWindow = nearWindow;
-    }
-
     public boolean isFootSpace() {
         return footSpace;
     }
 
     public void setFootSpace(boolean footSpace) {
         this.footSpace = footSpace;
+    }
+
+    public boolean isNearWindow() {
+        return nearWindow;
+    }
+
+    public void setNearWindow(boolean nearWindow) {
+        this.nearWindow = nearWindow;
     }
 
     public boolean isFreeSeatNextToIt() {

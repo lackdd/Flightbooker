@@ -1,6 +1,7 @@
 package com.lackdd.flightbooker.seeders;
 
 import com.lackdd.flightbooker.entities.Flight;
+import com.lackdd.flightbooker.entities.FlightSeat;
 import com.lackdd.flightbooker.repositories.FlightRepository;
 import com.lackdd.flightbooker.repositories.FlightSeatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,24 @@ public class FlightSeeder implements CommandLineRunner {
     public double randomPrice() {
         double rand = random.nextDouble(100, 1000);
         return Math.round(rand * 10.0) / 10.0;
+    }
+
+    public List<FlightSeat> generateSeats(Flight flight, String column) {
+        List<FlightSeat> seats = new ArrayList<>();
+        for (int i = 1; i < 17; i++) {
+            FlightSeat seat = new FlightSeat();
+
+            seat.setSeatNumber(column + i);
+            seat.setOccupied(false);
+            seat.setNearWindow(false);
+            seat.setFootSpace(false);
+            seat.setFreeSeatNextToIt(false);
+            seat.setNearExit(false);
+            seat.setFlight(flight);
+
+            seats.add(seat);
+        }
+        return seats;
     }
 
     private class DestinationDetails {
@@ -115,6 +134,21 @@ public class FlightSeeder implements CommandLineRunner {
             flights.add(flight);
         }
         repo.saveAll(flights);
+
+        for (Flight flight : flights) {
+            List<FlightSeat> allSeats = new ArrayList<>();
+            allSeats.addAll(generateSeats(flight, "A"));
+            allSeats.addAll(generateSeats(flight, "B"));
+            allSeats.addAll(generateSeats(flight, "C"));
+            allSeats.addAll(generateSeats(flight, "D"));
+            allSeats.addAll(generateSeats(flight, "E"));
+            allSeats.addAll(generateSeats(flight, "F"));
+
+            flight.setSeats(allSeats);
+
+            seatRepo.saveAll(allSeats);
+        }
+
         System.out.println("100 flights added successfully");
     }
 
