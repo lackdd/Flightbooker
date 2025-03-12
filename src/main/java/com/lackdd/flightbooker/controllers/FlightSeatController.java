@@ -22,9 +22,9 @@ public class FlightSeatController {
     @Autowired
     private FlightSeatService service;
 
-    @GetMapping("/seats/{flightNumber}")
-    public ResponseEntity<?> getFlightSeatDTOs(@PathVariable String flightNumber) {
-        List<FlightSeatDTO> seats = service.getFlightSeatDTOs(flightNumber);
+    @GetMapping("/seats/{flightId}")
+    public ResponseEntity<?> getFlightSeatDTOs(@PathVariable Integer flightId) {
+        List<FlightSeatDTO> seats = service.getFlightSeatDTOs(flightId);
         return ResponseEntity.ok(seats);
     }
 

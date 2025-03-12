@@ -15,32 +15,12 @@ import {useNavigate} from "react-router-dom";
 const columnHelper = createColumnHelper();
 
 const columns = [
-    /*columnHelper.accessor('flightNumber', {
-        cell: info => info.getValue(),
-        header: () => 'Flight Number',
-        footer: info => info.column.id,
-    }),*/
     columnHelper.accessor(row => row.startingLocation, {
         id: 'startingLocation',
         cell: info => info.getValue(),
         header: () => 'Starting Location',
         filterFn: "includesString",
     }),
-/*    columnHelper.accessor('startingLocationCity', {
-        header: () => 'Starting Location City',
-        cell: info => info.getValue(),
-        footer: info => info.column.id,
-    }),
-    columnHelper.accessor('startingLocationCountry', {
-        header: () => 'Starting Location Country',
-        cell: info => info.getValue(),
-        footer: info => info.column.id,
-    }),
-    columnHelper.accessor('startingLocationIATA', {
-        header: () => 'Starting Location IATA',
-        cell: info => info.getValue(),
-        footer: info => info.column.id,
-    }),*/
     columnHelper.accessor('destination', {
         header: ({column}) => (
             <button onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
@@ -50,21 +30,6 @@ const columns = [
         cell: info => info.getValue(),
         filterFn: "includesString",
     }),
-/*    columnHelper.accessor('destinationCity', {
-        header: () => 'Destination City',
-        cell: info => info.getValue(),
-        footer: info => info.column.id,
-    }),
-    columnHelper.accessor('destinationCountry', {
-        header: () => 'Destination Country',
-        cell: info => info.getValue(),
-        footer: info => info.column.id,
-    }),
-    columnHelper.accessor('destinationIATA', {
-        header: () => 'Destination IATA',
-        cell: info => info.getValue(),
-        footer: info => info.column.id,
-    }),*/
     columnHelper.accessor('startingDateTime', {
         header: ({column}) => (
             <button onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
@@ -217,7 +182,7 @@ function FlightSchedule() {
                 {table.getRowModel().rows.map(row => (
                     <tr
                         key={row.id}
-                        onClick={() => navigate(`/seats/${row.original.flightNumber}`, { state: { flight: row.original } })}
+                        onClick={() => navigate(`/seats/${row.original.id}`, { state: { flight: row.original } })}
                     >
                         {row.getVisibleCells().map(cell => (
                             <td key={cell.id}>

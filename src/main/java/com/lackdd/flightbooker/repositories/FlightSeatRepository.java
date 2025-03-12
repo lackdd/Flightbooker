@@ -12,6 +12,7 @@ import java.util.List;
 @Repository
 public interface FlightSeatRepository extends JpaRepository<FlightSeat, Integer> {
 
-    @Query("SELECT fs from FlightSeat fs WHERE fs.flight.flightNumber = :flightNumber")
-    List<FlightSeat> findByFlightNumber(String flightNumber);
+    List<FlightSeat> findByFlightId(Integer flightId);
+
+
 }

@@ -16,8 +16,8 @@ public class FlightSeatService {
     @Autowired
     private FlightSeatRepository repo;
 
-    public List<FlightSeatDTO> getFlightSeatDTOs(String flightNumber) {
-        return repo.findByFlightNumber(flightNumber).stream()
+    public List<FlightSeatDTO> getFlightSeatDTOs(Integer flightId) {
+        return repo.findByFlightId(flightId).stream()
                 .map(FlightMapper::toFlightSeatDTO)
                 .collect(Collectors.toList());
 
