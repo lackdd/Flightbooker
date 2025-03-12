@@ -11,19 +11,19 @@ public class FlightSeatDTO {
     private boolean footSpace;
     private boolean freeSeatNextToIt;
     private boolean nearExit;
-    private Flight flight;
+    private String flightNumber;
 
     public FlightSeatDTO() {
     }
 
-    public FlightSeatDTO(Integer id, String seatNumber, boolean occupied, boolean nearWindow, boolean freeSeatNextToIt, boolean footSpace, Flight flight, boolean nearExit) {
+    public FlightSeatDTO(Integer id, String seatNumber, boolean occupied, boolean nearWindow, boolean freeSeatNextToIt, boolean footSpace, String flightNumber, boolean nearExit) {
         this.id = id;
         this.seatNumber = seatNumber;
         this.occupied = occupied;
         this.nearWindow = nearWindow;
         this.freeSeatNextToIt = freeSeatNextToIt;
         this.footSpace = footSpace;
-        this.flight = flight;
+        this.flightNumber = flightNumber;
         this.nearExit = nearExit;
     }
 
@@ -67,12 +67,12 @@ public class FlightSeatDTO {
         this.footSpace = footSpace;
     }
 
-    public Flight getFlight() {
-        return flight;
+    public String getFlightNumber() {
+        return flightNumber;
     }
 
-    public void setFlight(Flight flight) {
-        this.flight = flight;
+    public void setFlightNumber(String flightNumber) {
+        this.flightNumber = flightNumber;
     }
 
     public boolean isNearExit() {

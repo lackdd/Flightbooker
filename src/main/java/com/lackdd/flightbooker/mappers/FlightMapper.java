@@ -19,6 +19,6 @@ public class FlightMapper {
             return null;
         }
         return new FlightSeatDTO(
-                seat.getId(), seat.getSeatNumber(), seat.isOccupied(), seat.isNearWindow(), seat.isFreeSeatNextToIt(), seat.isFootSpace(), seat.getFlight(), seat.isNearExit());
+                seat.getId(), seat.getSeatNumber(), seat.isOccupied(), seat.isNearWindow(), seat.isFreeSeatNextToIt(), seat.isFootSpace(), seat.getFlight().getFlightNumber(), seat.isNearExit());
     }
 }
