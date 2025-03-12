@@ -1,5 +1,6 @@
 package com.lackdd.flightbooker.controllers;
 
+import com.lackdd.flightbooker.dtos.FlightDTO;
 import com.lackdd.flightbooker.entities.Flight;
 import com.lackdd.flightbooker.services.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,8 @@ public class FlightController {
     private FlightService service;
 
     @GetMapping("/flights")
-    public ResponseEntity<?> getFlights() {
-        List<Flight> flights = service.getFlights();
+    public ResponseEntity<?> getFlightDTOs() {
+        List<FlightDTO> flights = service.getFlightDTOs();
         return ResponseEntity.ok(flights);
     }
 }

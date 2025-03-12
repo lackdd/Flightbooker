@@ -217,7 +217,7 @@ function FlightSchedule() {
                 {table.getRowModel().rows.map(row => (
                     <tr
                         key={row.id}
-                        onClick={() => navigate(`/seats/${row.original.id}`, { state: { flight: row.original } })}
+                        onClick={() => navigate(`/seats/${row.original.flightNumber}`, { state: { flight: row.original } })}
                     >
                         {row.getVisibleCells().map(cell => (
                             <td key={cell.id}>
