@@ -76,21 +76,21 @@ function FlightSeats() {
             <div>
                 <div className="seat-row">
                     {columnA.map(seat => (
-                        <button key={seat.id} className="seat" style={{marginRight: "5px"}}>
+                        <button key={seat.id} className={seat.occupied  ? "occupied" : "seat"} style={{marginRight: "5px"}}>
                             {/*{seat.seatNumber}*/}
                         </button>
                     ))}
                 </div>
                 <div className="seat-row">
                     {columnB.map(seat => (
-                        <button key={seat.id} className="seat" style={{marginRight: "5px"}}>
+                        <button key={seat.id} className={seat.occupied  ? "occupied" : "seat"} style={{marginRight: "5px"}}>
                             {/*{seat.seatNumber}*/}
                         </button>
                     ))}
                 </div>
                 <div className="seat-row">
                     {columnC.map(seat => (
-                        <button key={seat.id} className="seat" style={{marginRight: "5px"}}>
+                        <button key={seat.id} className={seat.occupied  ? "occupied" : "seat"} style={{marginRight: "5px"}}>
                             {/*{seat.seatNumber}*/}
                         </button>
                     ))}
@@ -100,21 +100,21 @@ function FlightSeats() {
 
                 <div className="seat-row2">
                     {columnD.map(seat => (
-                        <button key={seat.id} className="seat" style={{marginRight: "5px"}}>
+                        <button key={seat.id} className={seat.occupied  ? "occupied" : "seat"} style={{marginRight: "5px"}}>
                             {/*{seat.seatNumber}*/}
                         </button>
                     ))}
                 </div>
                 <div className="seat-row2">
                     {columnE.map(seat => (
-                        <button key={seat.id} className="seat" style={{marginRight: "5px"}}>
+                        <button key={seat.id} className={seat.occupied  ? "occupied" : "seat"} style={{marginRight: "5px"}}>
                             {/*{seat.seatNumber}*/}
                         </button>
                     ))}
                 </div>
                 <div className="seat-row2">
                     {columnF.map(seat => (
-                        <button key={seat.id} className="seat" style={{marginRight: "5px"}}>
+                        <button key={seat.id} className={seat.occupied  ? "occupied" : "seat"} style={{marginRight: "5px"}}>
                             {/*{seat.seatNumber}*/}
                         </button>
                     ))}

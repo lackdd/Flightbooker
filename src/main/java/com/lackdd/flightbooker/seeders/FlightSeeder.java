@@ -43,7 +43,13 @@ public class FlightSeeder implements CommandLineRunner {
             FlightSeat seat = new FlightSeat();
 
             seat.setSeatNumber(column + i);
-            seat.setOccupied(false);
+
+            double rand = random.nextDouble();
+            if(rand < 0.4) {
+                seat.setOccupied(true);
+            } else {
+                seat.setOccupied(false);
+            }
             seat.setNearWindow(false);
             seat.setFootSpace(false);
             seat.setFreeSeatNextToIt(false);

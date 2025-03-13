@@ -71,11 +71,24 @@
 }
 
 /* Styling for occupied seats */
-.seat.occupied {
-    background: #D9534F; /* Red for occupied seats */
-    cursor: not-allowed;
-    box-shadow: none;
-    opacity: 0.7;
+.occupied {
+    width: 30px; /* Adjusted width */
+    height: 30px; /* Adjusted height */
+    font-size: 14px; /* Slightly larger font */
+    padding: 5px; /* More refined padding */
+    border-radius: 4px; /* Modern rounded corners */
+    /*border: 1px solid #888; !* Softer border color *!*/
+    /*background: linear-gradient(145deg, #B0B2B5, #909295); !* Subtle gradient *!*/
+    background-color: #FF0000;
+    color: white; /* Text color for contrast */
+    font-weight: bold;
+    cursor: pointer; /* Indicates it's clickable */
+    /*display: flex;
+    justify-content: center;
+    align-items: center;*/
+    /*box-shadow: 3px 3px 6px #8d8f92, -3px -3px 6px #c0c2c5; !* Soft 3D effect *!*/
+    transition: all 0.2s ease-in-out;
+    margin: 3px;
 }
 
 /* Styling for selected seats */
