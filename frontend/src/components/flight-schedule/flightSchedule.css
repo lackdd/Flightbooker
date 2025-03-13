@@ -1,4 +1,8 @@
 /*This css file was initially generated with AI so i could focus more on the code and design later*/
+.flight {
+
+}
+
 html,
 body {
     height: 100%;
@@ -19,7 +23,7 @@ body {
     padding-top: 20px;
 }
 
-h1 {
+.flight h1 {
     font-size: 2rem;
     color: white;
     text-align: center;

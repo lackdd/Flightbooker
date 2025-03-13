@@ -1,6 +1,114 @@
-.seat {
+/*.seat {
     color: black;
     font-size: 20;
     border: 1px solid #ccc;
     marginRight: "5px";
+}*/
+
+/*.seat {
+    width: 30px; !* Adjust width *!
+    height: 30px; !* Adjust height *!
+    font-size: 12px; !* Adjust font size *!
+    padding: 2px; !* Reduce padding *!
+    border-radius: 3px; !* Optional: round the edges *!
+    border: 1px solid #000; !* Optional: border *!
+    border-color: #A5A7AA;
+    background-color: #A5A7AA; !* Set background *!
+    cursor: pointer; !* Makes it clickable *!
+}*/
+
+
+.airplane-background {
+    background-size: contain; /* Ensures the whole image is visible */
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 100vw;
+    height: 100vh; /* Full-screen */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateX(-17%); /* Shift left */
+}
+
+.flightseat h1 {
+    font-size: 2rem;
+    color: white;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.seat {
+    width: 30px; /* Adjusted width */
+    height: 30px; /* Adjusted height */
+    font-size: 14px; /* Slightly larger font */
+    padding: 5px; /* More refined padding */
+    border-radius: 4px; /* Modern rounded corners */
+    /*border: 1px solid #888; !* Softer border color *!*/
+    /*background: linear-gradient(145deg, #B0B2B5, #909295); !* Subtle gradient *!*/
+    background-color: #A5A7AA;
+    color: white; /* Text color for contrast */
+    font-weight: bold;
+    cursor: pointer; /* Indicates it's clickable */
+    /*display: flex;
+    justify-content: center;
+    align-items: center;*/
+    /*box-shadow: 3px 3px 6px #8d8f92, -3px -3px 6px #c0c2c5; !* Soft 3D effect *!*/
+    transition: all 0.2s ease-in-out;
+    margin: 3px;
+}
+
+/* Hover effect */
+.seat:hover {
+    background: linear-gradient(145deg, #909295, #B0B2B5); /* Reverse gradient */
+    transform: scale(1.1); /* Slight increase in size */
+    box-shadow: 3px 3px 10px #7c7e81, -3px -3px 10px #d0d2d5; /* More elevation */
+}
+
+/* Clicked (Active) Effect */
+.seat:active {
+    transform: scale(0.95); /* Small compression effect */
+    box-shadow: inset 3px 3px 6px #7c7e81, inset -3px -3px 6px #d0d2d5; /* Inner shadow */
+}
+
+/* Styling for occupied seats */
+.seat.occupied {
+    background: #D9534F; /* Red for occupied seats */
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: 0.7;
+}
+
+/* Styling for selected seats */
+.seat.selected {
+    background: #5CB85C; /* Green for selected seats */
+    color: white;
+    box-shadow: 0px 0px 8px #5CB85C;
+}
+
+.seat-container {
+    position: absolute; /* Allows precise positioning over the airplane */
+    top: 46%; /* Adjust based on plane image */
+    left: 49%; /* Adjust to match the plane */
+    transform: translate(-50%, -50%); /* Centers the grid */
+    display: flex;
+    flex-direction: column; /* Stack rows vertically */
+    gap: 5px; /* Reduce vertical spacing */
+    justify-content: center;
+}
+
+/* Ensure seats inside a row are aligned properly */
+.seat-row {
+    display: flex;
+    gap: 5px; /* Adjust horizontal spacing between seats */
+    justify-content: center;
+}
+
+.seat-row2 {
+    display: flex;
+    gap: 5px; /* Adjust horizontal spacing between seats */
+    justify-content: center;
+}
+
+.seat-gap {
+    height: 40px; /* Increase this value for more spacing */
 }

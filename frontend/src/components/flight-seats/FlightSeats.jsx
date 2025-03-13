@@ -2,6 +2,8 @@ import {useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import "./FlightSeats.css";
+import airplaneImage from "/src/assets/airplane_seat_map.png";
+
 
 function FlightSeats() {
     const location = useLocation();
@@ -63,57 +65,64 @@ function FlightSeats() {
 
 
     return (
-        <div className="flight-seats-container">
+        <div className="flightseat">
+        <div className="airplane-background" style={{ backgroundImage: `url(${airplaneImage})` }}>
+        <div className="seat-container">
             <h1>Select Seats for Flight {flight.flightNumber}</h1>
             {/*<p>From: {flight.startingLocation} → To: {flight.destination}</p>
             <p>Departure: {flight.startingDateTime}</p>
             <p>Arrival: {flight.arrivalDateTime}</p>
             <p>Price: {flight.price}€</p>*/}
             <div>
-                <p>
+                <div className="seat-row">
                     {columnA.map(seat => (
                         <button key={seat.id} className="seat" style={{marginRight: "5px"}}>
-                            {seat.seatNumber}
+                            {/*{seat.seatNumber}*/}
                         </button>
                     ))}
-                </p>
-                <p>
+                </div>
+                <div className="seat-row">
                     {columnB.map(seat => (
                         <button key={seat.id} className="seat" style={{marginRight: "5px"}}>
-                            {seat.seatNumber}
+                            {/*{seat.seatNumber}*/}
                         </button>
                     ))}
-                </p>
-                <p>
+                </div>
+                <div className="seat-row">
                     {columnC.map(seat => (
                         <button key={seat.id} className="seat" style={{marginRight: "5px"}}>
-                            {seat.seatNumber}
+                            {/*{seat.seatNumber}*/}
                         </button>
                     ))}
-                </p>
-                <p>
+                </div>
+
+                <div className="seat-gap"></div>
+
+                <div className="seat-row2">
                     {columnD.map(seat => (
                         <button key={seat.id} className="seat" style={{marginRight: "5px"}}>
-                            {seat.seatNumber}
+                            {/*{seat.seatNumber}*/}
                         </button>
                     ))}
-                </p>
-                <p>
+                </div>
+                <div className="seat-row2">
                     {columnE.map(seat => (
                         <button key={seat.id} className="seat" style={{marginRight: "5px"}}>
-                            {seat.seatNumber}
+                            {/*{seat.seatNumber}*/}
                         </button>
                     ))}
-                </p>
-                <p>
+                </div>
+                <div className="seat-row2">
                     {columnF.map(seat => (
                         <button key={seat.id} className="seat" style={{marginRight: "5px"}}>
-                            {seat.seatNumber}
+                            {/*{seat.seatNumber}*/}
                         </button>
                     ))}
-                </p>
+                </div>
             </div>
             {/* TODO: Add seat selection logic here */}
+        </div>
+        </div>
         </div>
     )
 }

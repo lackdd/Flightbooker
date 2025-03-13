@@ -33,7 +33,8 @@ const columns = [
     columnHelper.accessor('startingDateTime', {
         header: ({column}) => (
             <button onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                Starting Date and Time {column.getIsSorted() === "asc" ? "🔼" : column.getIsSorted() === "desc" ? "🔽" : ""}
+                Starting Date and
+                Time {column.getIsSorted() === "asc" ? "🔼" : column.getIsSorted() === "desc" ? "🔽" : ""}
             </button>
         ),
         cell: info => info.getValue(),
@@ -42,7 +43,8 @@ const columns = [
     columnHelper.accessor('arrivalDateTime', {
         header: ({column}) => (
             <button onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                Arrival Date and Time {column.getIsSorted() === "asc" ? "🔼" : column.getIsSorted() === "desc" ? "🔽" : ""}
+                Arrival Date and
+                Time {column.getIsSorted() === "asc" ? "🔼" : column.getIsSorted() === "desc" ? "🔽" : ""}
             </button>
         ),
         cell: info => info.getValue(),
@@ -122,93 +124,95 @@ function FlightSchedule() {
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
-        state: { sorting, columnFilters },
+        state: {sorting, columnFilters},
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
     });
 
     return (
-        <div className="page-container">
-            <h1>Teretulemast Flightbooki! Palun plaanige oma lennuplaan.</h1>
-            <div className="filters">
-                <input
-                    type="text"
-                    placeholder="Search Destination"
-                    onChange={(e) => table.getColumn("destination")?.setFilterValue(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="Starting Date and Time"
-                    onChange={(e) => table.getColumn("startingDateTime")?.setFilterValue(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="Arrival Date and Time"
-                    onChange={(e) => table.getColumn("arrivalDateTime")?.setFilterValue(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="Duration"
-                    onChange={(e) => table.getColumn("duration")?.setFilterValue(e.target.value)}
-                />
-                <input
-                    type="number"
-                    placeholder="Max Price (€)"
-                    onChange={(e) => {
-                        const value = e.target.value ? parseFloat(e.target.value) : undefined;
-                        table.getColumn("price")?.setFilterValue(value);
-                    }}
-                />
-            </div>
-            <div className="container">
-            <table>
-                <thead>
-                {table.getHeaderGroups().map(headerGroup => (
-                    <tr key={headerGroup.id}>
-                        {headerGroup.headers.map(header => (
-                            <th key={header.id}>
-                                {header.isPlaceholder
-                                ? null
-                                    : flexRender(
-                                        header.column.columnDef.header,
-                                        header.getContext()
-                                    )}
-                            </th>
+        <div className="flight">
+            <div className="page-container">
+                <h1 className="h1">Teretulemast Flightbooki! Palun plaanige oma lennuplaan.</h1>
+                <div className="filters">
+                    <input
+                        type="text"
+                        placeholder="Search Destination"
+                        onChange={(e) => table.getColumn("destination")?.setFilterValue(e.target.value)}
+                    />
+                    <input
+                        type="text"
+                        placeholder="Starting Date and Time"
+                        onChange={(e) => table.getColumn("startingDateTime")?.setFilterValue(e.target.value)}
+                    />
+                    <input
+                        type="text"
+                        placeholder="Arrival Date and Time"
+                        onChange={(e) => table.getColumn("arrivalDateTime")?.setFilterValue(e.target.value)}
+                    />
+                    <input
+                        type="text"
+                        placeholder="Duration"
+                        onChange={(e) => table.getColumn("duration")?.setFilterValue(e.target.value)}
+                    />
+                    <input
+                        type="number"
+                        placeholder="Max Price (€)"
+                        onChange={(e) => {
+                            const value = e.target.value ? parseFloat(e.target.value) : undefined;
+                            table.getColumn("price")?.setFilterValue(value);
+                        }}
+                    />
+                </div>
+                <div className="container">
+                    <table>
+                        <thead>
+                        {table.getHeaderGroups().map(headerGroup => (
+                            <tr key={headerGroup.id}>
+                                {headerGroup.headers.map(header => (
+                                    <th key={header.id}>
+                                        {header.isPlaceholder
+                                            ? null
+                                            : flexRender(
+                                                header.column.columnDef.header,
+                                                header.getContext()
+                                            )}
+                                    </th>
+                                ))}
+                            </tr>
                         ))}
-                    </tr>
-                ))}
-                </thead>
-                <tbody>
-                {table.getRowModel().rows.map(row => (
-                    <tr
-                        key={row.id}
-                        onClick={() => navigate(`/seats/${row.original.id}`, { state: { flight: row.original } })}
-                    >
-                        {row.getVisibleCells().map(cell => (
-                            <td key={cell.id}>
-                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                            </td>
+                        </thead>
+                        <tbody>
+                        {table.getRowModel().rows.map(row => (
+                            <tr
+                                key={row.id}
+                                onClick={() => navigate(`/seats/${row.original.id}`, {state: {flight: row.original}})}
+                            >
+                                {row.getVisibleCells().map(cell => (
+                                    <td key={cell.id}>
+                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                    </td>
+                                ))}
+                            </tr>
                         ))}
-                    </tr>
-                ))}
-                </tbody>
-                <tfoot>
-                {table.getFooterGroups().map(footerGroup => (
-                    <tr key={footerGroup.id}>
-                        {footerGroup.headers.map(header => (
-                            <th key={header.id}>
-                                {header.isPlaceholder
-                                ? null
-                                : flexRender(
-                                    header.column.columnDef.footer,
-                                        header.getContext()
-                                    )}
-                            </th>
+                        </tbody>
+                        <tfoot>
+                        {table.getFooterGroups().map(footerGroup => (
+                            <tr key={footerGroup.id}>
+                                {footerGroup.headers.map(header => (
+                                    <th key={header.id}>
+                                        {header.isPlaceholder
+                                            ? null
+                                            : flexRender(
+                                                header.column.columnDef.footer,
+                                                header.getContext()
+                                            )}
+                                    </th>
+                                ))}
+                            </tr>
                         ))}
-                    </tr>
-                ))}
-                </tfoot>
-            </table>
+                        </tfoot>
+                    </table>
+                </div>
             </div>
         </div>
     );
