@@ -68,6 +68,7 @@
 .seat:active {
     transform: scale(0.95); /* Small compression effect */
     box-shadow: inset 3px 3px 6px #7c7e81, inset -3px -3px 6px #d0d2d5; /* Inner shadow */
+    /*background: #5CB85C;*/
 }
 
 /* Styling for occupied seats */
@@ -97,6 +98,13 @@
     color: white;
     box-shadow: 0px 0px 8px #5CB85C;
 }
+
+.flightseat button:focus {
+    outline: 2px solid black; /* Adjust thickness & color */
+    outline-offset: 2px;
+    background: #5CB85C;
+}
+
 
 .seat-container {
     position: absolute; /* Allows precise positioning over the airplane */

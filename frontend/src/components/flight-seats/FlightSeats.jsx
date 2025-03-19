@@ -63,12 +63,21 @@ function FlightSeats() {
         getFlightSeats();
     }, []);
 
+    /*const handleButtonClick() {
+
+    }*/
+
 
     return (
         <div className="flightseat">
         <div className="airplane-background" style={{ backgroundImage: `url(${airplaneImage})` }}>
         <div className="seat-container">
             <h1>Select Seats for Flight {flight.flightNumber}</h1>
+            <div className="filters">
+                <button onClick={() => handleButtonClick()}>
+                    Next to Window
+                </button>
+            </div>
             {/*<p>From: {flight.startingLocation} → To: {flight.destination}</p>
             <p>Departure: {flight.startingDateTime}</p>
             <p>Arrival: {flight.arrivalDateTime}</p>
@@ -77,21 +86,21 @@ function FlightSeats() {
                 <div className="seat-row">
                     {columnA.map(seat => (
                         <button key={seat.id} className={seat.occupied  ? "occupied" : "seat"} style={{marginRight: "5px"}}>
-                            {/*{seat.seatNumber}*/}
+                            {seat.seatNumber}
                         </button>
                     ))}
                 </div>
                 <div className="seat-row">
                     {columnB.map(seat => (
                         <button key={seat.id} className={seat.occupied  ? "occupied" : "seat"} style={{marginRight: "5px"}}>
-                            {/*{seat.seatNumber}*/}
+                            {seat.seatNumber}
                         </button>
                     ))}
                 </div>
                 <div className="seat-row">
                     {columnC.map(seat => (
                         <button key={seat.id} className={seat.occupied  ? "occupied" : "seat"} style={{marginRight: "5px"}}>
-                            {/*{seat.seatNumber}*/}
+                            {seat.seatNumber}
                         </button>
                     ))}
                 </div>
@@ -101,21 +110,21 @@ function FlightSeats() {
                 <div className="seat-row2">
                     {columnD.map(seat => (
                         <button key={seat.id} className={seat.occupied  ? "occupied" : "seat"} style={{marginRight: "5px"}}>
-                            {/*{seat.seatNumber}*/}
+                            {seat.seatNumber}
                         </button>
                     ))}
                 </div>
                 <div className="seat-row2">
                     {columnE.map(seat => (
                         <button key={seat.id} className={seat.occupied  ? "occupied" : "seat"} style={{marginRight: "5px"}}>
-                            {/*{seat.seatNumber}*/}
+                            {seat.seatNumber}
                         </button>
                     ))}
                 </div>
                 <div className="seat-row2">
                     {columnF.map(seat => (
                         <button key={seat.id} className={seat.occupied  ? "occupied" : "seat"} style={{marginRight: "5px"}}>
-                            {/*{seat.seatNumber}*/}
+                            {seat.seatNumber}
                         </button>
                     ))}
                 </div>

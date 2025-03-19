@@ -9,10 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.time.ZoneId;
 
 @Component
@@ -50,10 +47,30 @@ public class FlightSeeder implements CommandLineRunner {
             } else {
                 seat.setOccupied(false);
             }
-            seat.setNearWindow(false);
-            seat.setFootSpace(false);
+
+            if(column == "A" || column == "F") {
+                seat.setNearWindow(true);
+            } else {
+                seat.setNearWindow(false);
+            }
+
+            Set<String> seatsWithFootSpace = Set.of("A1", "B1", "C1", "D1", "E1", "F1");
+            if(seatsWithFootSpace.contains(seat.getSeatNumber())) {
+                seat.setFootSpace(true);
+            } else {
+                seat.setFootSpace(false);
+            }
+
             seat.setFreeSeatNextToIt(false);
-            seat.setNearExit(false);
+
+            Set<String> seatsNearExit = Set.of("F5", "F6", "F7", "F8", "F9", "E6", "E7", "E8", "A5", "A6", "A7", "A8", "A9", "B6", "B7", "B8");
+
+            if(seatsNearExit.contains(seat.getSeatNumber())) {
+                seat.setNearExit(true);
+            } else {
+                seat.setNearExit(false);
+            }
+
             seat.setFlight(flight);
 
             seats.add(seat);
@@ -151,6 +168,24 @@ public class FlightSeeder implements CommandLineRunner {
             allSeats.addAll(generateSeats(flight, "F"));
 
             flight.setSeats(allSeats);
+
+            // checking what seats have a free seat next to it now that occupied seats have been generated
+            for (FlightSeat seat : flight.getSeats()) {
+                String column = seat.getSeatNumber().substring(0, 1);
+                char nextColumn = (char) (column.charAt(0) + 1);
+                char prevColumn = (char) (column.charAt(0) - 1);
+                Integer row = Integer.parseInt(seat.getSeatNumber().substring(1));
+
+                String nextSeatNumber = (column.equals("F")) ? null : nextColumn + row.toString();
+                String prevSeatNumber = (column.equals("A")) ? null : prevColumn + row.toString();
+
+                FlightSeat nextSeat = flight.getSeatByNumber(nextSeatNumber);
+                FlightSeat prevSeat = flight.getSeatByNumber(prevSeatNumber);
+
+                if((nextSeat != null && !nextSeat.isOccupied()) || (prevSeat != null && !prevSeat.isOccupied())) {
+                    seat.setFreeSeatNextToIt(true);
+                }
+            }
 
             seatRepo.saveAll(allSeats);
         }

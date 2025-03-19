@@ -180,4 +180,13 @@ public class Flight {
     public void setSeats(List<FlightSeat> seats) {
         this.seats = seats;
     }
+
+    public FlightSeat getSeatByNumber(String seatNumber) {
+        for (FlightSeat seat : seats) {
+            if (seat.getSeatNumber().equals(seatNumber)) {
+                return seat;
+            }
+        }
+        return null;
+    }
 }
