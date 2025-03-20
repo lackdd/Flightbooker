@@ -1,0 +1,31 @@
+.people-selection {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.radio-group {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 10px 15px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.radio-option input {
+    display: none;
+}
+
+.radio-option.selected {
+    background-color: #4CAF50;
+    color: white;
+    border-color: #4CAF50;
+}
