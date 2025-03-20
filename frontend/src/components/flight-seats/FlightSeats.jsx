@@ -10,6 +10,7 @@ function FlightSeats() {
     const location = useLocation();
     const flight = location.state?.flight;
     const [columns, setColumns] = useState([]);
+    const [originalColumns, setOriginalColumns] = useState({});
 
 
     useEffect(() => {
@@ -29,21 +30,45 @@ function FlightSeats() {
                 response.data.forEach(seat => {
                     const column = seat.seatNumber.charAt(0);
                     if (listOfColumns[column]) {
-                        listOfColumns[column].push(seat);
+                        listOfColumns[column].push({...seat, hidden: false});
                     }
                 });
 
+                setOriginalColumns(listOfColumns);
                 setColumns(listOfColumns);
             } catch (error) {
                 console.log(error.message);
             }
         };
-        getFlightSeats();
-    }, []);
 
-    /*const handleButtonClick() {
+        if (flight?.id) {
+            getFlightSeats();
+        }
+    }, [flight?.id]);
 
-    }*/
+    const filterSeats = (property) => {
+        const filteredColumns = {...columns};
+        Object.keys(filteredColumns).forEach(columnKey => {
+            filteredColumns[columnKey] = filteredColumns[columnKey].map(seat => ({
+                ...seat,
+                hidden: !seat[property]
+            }));
+        });
+        setColumns(filteredColumns);
+    };
+
+    const resetFilters = () => {
+        const filteredColumns = {...columns};
+
+        Object.keys(filteredColumns).forEach(columnKey => {
+            filteredColumns[columnKey] = filteredColumns[columnKey].map(seat => ({
+                ...seat,
+                hidden: false
+            }));
+        });
+
+        setColumns(filteredColumns);
+    };
 
 
     return (
@@ -52,8 +77,20 @@ function FlightSeats() {
                 <div className="seat-container">
                     <h1>Select Seats for Flight {flight.flightNumber}</h1>
                     <div className="filters">
-                        <button onClick={() => handleButtonClick()}>
-                            Next to Window
+                        <button onClick={() => filterSeats('nearWindow')}>
+                            Show Window Seats
+                        </button>
+                        <button onClick={() => filterSeats('nearExit')}>
+                            Show Near Exit Seats
+                        </button>
+                        <button onClick={() => filterSeats('footSpace')}>
+                            Show Seats with Foot Space
+                        </button>
+                        <button onClick={() => filterSeats('freeSeatNextToIt')}>
+                            Show Two Free Seats
+                        </button>
+                        <button onClick={resetFilters}>
+                            Reset Filters
                         </button>
                     </div>
 
@@ -67,7 +104,9 @@ function FlightSeats() {
                                         <button
                                             key={seat.id}
                                             className={seat.occupied ? "occupied" : "seat"}
-                                            style={{marginRight: "5px"}}
+                                            style={{marginRight: "5px",
+                                            visibility: seat.hidden ? "hidden" : "visible"
+                                            }}
                                         >
                                             {seat.seatNumber}
                                         </button>
