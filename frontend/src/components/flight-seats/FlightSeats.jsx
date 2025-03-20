@@ -56,7 +56,7 @@ function FlightSeats() {
         });
         setColumns(filteredColumns);
     };
-
+    // a
     const resetFilters = () => {
         const filteredColumns = {...columns};
 
