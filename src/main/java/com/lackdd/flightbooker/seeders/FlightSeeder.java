@@ -182,7 +182,19 @@ public class FlightSeeder implements CommandLineRunner {
                 FlightSeat nextSeat = flight.getSeatByNumber(nextSeatNumber);
                 FlightSeat prevSeat = flight.getSeatByNumber(prevSeatNumber);
 
-                if((nextSeat != null && !nextSeat.isOccupied()) || (prevSeat != null && !prevSeat.isOccupied())) {
+                if(column.equals("C")) {
+                    if(!seat.isOccupied() && (prevSeat != null && !prevSeat.isOccupied())) {
+                        seat.setFreeSeatNextToIt(true);
+                    }
+                }
+
+                if(column.equals("D")) {
+                    if(!seat.isOccupied() && (nextSeat != null && !nextSeat.isOccupied())) {
+                        seat.setFreeSeatNextToIt(true);
+                    }
+                }
+
+                if((!column.equals("C") && !column.equals("D")) && !seat.isOccupied() && ((nextSeat != null && !nextSeat.isOccupied()) || (prevSeat != null && !prevSeat.isOccupied()))) {
                     seat.setFreeSeatNextToIt(true);
                 }
             }
