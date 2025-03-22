@@ -1,5 +1,6 @@
 import {useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
+import React from "react";
 import axios from "axios";
 import "./FlightSeats.css";
 import airplaneImage from "/src/assets/airplane_seat_map.png";
@@ -10,12 +11,6 @@ function FlightSeats() {
     const flight = location.state?.flight;
     const [seats, setSeats] = useState([]);
     const [rows, setRows] = useState([]);
-    const [columnA, setColumnA] = useState([]);
-    const [columnB, setColumnB] = useState([]);
-    const [columnC, setColumnC] = useState([]);
-    const [columnD, setColumnD] = useState([]);
-    const [columnE, setColumnE] = useState([]);
-    const [columnF, setColumnF] = useState([]);
 
 
     useEffect(() => {
@@ -54,13 +49,16 @@ function FlightSeats() {
                     <h1>Select Seats for Flight {flight.flightNumber}</h1>
                     <div>
                         {Object.keys(rows).map((rowKey, index) => (
-                            <div key={rowKey} className="seat-row">
+                            <React.Fragment key={rowKey}>
+                            <div className="seat-row">
                                 {rows[rowKey].map(seat => (
                                 <button key={seat.id} className="seat">
                                     {seat.seatNumber}
                                 </button>
                                 ))}
                             </div>
+                        {index === 2 && <div className="seat-gap"> </div>}
+                            </React.Fragment>
                         ))}
                     </div>
                 </div>
