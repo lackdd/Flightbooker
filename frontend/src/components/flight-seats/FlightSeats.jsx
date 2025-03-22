@@ -9,8 +9,8 @@ import PeopleSelection from "../people-selection/PeopleSelection.jsx";
 function FlightSeats() {
     const location = useLocation();
     const flight = location.state?.flight;
-    const [columns, setColumns] = useState({});
-    const [filteredColumns, setFilteredColumns] = useState({});
+    const [rows, setRows] = useState({});
+    const [filteredRows, setFilteredRows] = useState({});
     const [selectedPeople, setSelectedPeople] = useState("1");
     const prevSelectedPeople = useRef(selectedPeople);
     const seatsLoaded = useRef(false);
@@ -24,20 +24,20 @@ function FlightSeats() {
         const getFlightSeats = async () => {
             try {
                 const response = await axios.get(`http://localhost:8080/api/seats/${flight.id}`);
-                const listOfColumns = { A: [], B: [], C: [], D: [], E: [], F: [] };
+                const listOfRows = { A: [], B: [], C: [], D: [], E: [], F: [] };
 
                 response.data.forEach(seat => {
-                    const column = seat.seatNumber.charAt(0);
-                    if (listOfColumns[column]) {
-                        listOfColumns[column].push({ ...seat, hidden: false, selected: false });
+                    const row = seat.seatNumber.charAt(0);
+                    if (listOfRows[row]) {
+                        listOfRows[row].push({ ...seat, hidden: false, selected: false });
                     }
                 });
 
-                setColumns(listOfColumns);
-                setFilteredColumns(listOfColumns);
+                setRows(listOfRows);
+                setFilteredRows(listOfRows);
                 seatsLoaded.current = true;
 
-                recommendSeats(listOfColumns);
+                recommendSeats(listOfRows);
             } catch (error) {
                 console.log(error.message);
             }
@@ -51,48 +51,82 @@ function FlightSeats() {
     useEffect(() => {
         if (seatsLoaded.current && prevSelectedPeople.current !== selectedPeople) {
             prevSelectedPeople.current = selectedPeople;
-            recommendSeats(filteredColumns);
+            recommendSeats(filteredRows);
         }
     }, [selectedPeople]);
 
 
     const filterSeats = (property) => {
         const filtered = {};
-        Object.keys(columns).forEach(columnKey => {
-            filtered[columnKey] = columns[columnKey].map(seat => ({
+        Object.keys(rows).forEach(rowKey => {
+            filtered[rowKey] = rows[rowKey].map(seat => ({
                 ...seat,
                 hidden: !seat[property]
             }));
         });
-        setFilteredColumns(filtered);
+        setFilteredRows(filtered);
         recommendSeats(filtered);
     };
 
 
     const filterTwoFreeSeats = () => {
+        const allowedRowPairs = [
+            ["A", "B"], ["B", "C"],
+            ["D", "E"], ["E", "F"]
+        ];
+
         const filtered = {};
-        Object.keys(columns).forEach(columnKey => {
-            const availableSeats = columns[columnKey].filter(seat => !seat.occupied);
-            filtered[columnKey] = availableSeats.map((seat, index, array) => {
-                const nextSeat = array[index + 1];
+
+        // Build seatMap[column][row] = seat
+        const seatMap = {};
+        Object.keys(rows).forEach(rowKey => {
+            rows[rowKey].forEach(seat => {
+                const col = seat.seatNumber.substring(1);
+                if (!seatMap[col]) seatMap[col] = {};
+                seatMap[col][rowKey] = seat;
+            });
+        });
+
+        // Check each seat if it's part of a valid adjacent pair
+        Object.keys(rows).forEach(rowKey => {
+            filtered[rowKey] = rows[rowKey].map(seat => {
+                const col = seat.seatNumber.substring(1);
+                const row = seat.seatNumber.charAt(0);
+
+                const validPair = allowedRowPairs.some(([r1, r2]) => {
+                    const pair = (row === r1 && seatMap[col]?.[r2]) || (row === r2 && seatMap[col]?.[r1]);
+                    return pair &&
+                        !seat.occupied &&
+                        !seatMap[col][r1]?.occupied &&
+                        !seatMap[col][r2]?.occupied;
+                });
+
                 return {
                     ...seat,
-                    hidden: !nextSeat || nextSeat.occupied
+                    hidden: !validPair
                 };
             });
         });
-        setFilteredColumns(filtered);
+
+        setFilteredRows(filtered);
         recommendSeats(filtered, true);
     };
 
 
+
+
     const resetFilters = () => {
-        setFilteredColumns(columns);
-        recommendSeats(columns);
+        setFilteredRows(rows);
+        recommendSeats(rows);
     };
 
 
     const recommendSeats = (filteredData, requireAdjacent = false) => {
+        const allowedRowPairs = [
+            ["A", "B"], ["B", "C"],
+            ["D", "E"], ["E", "F"]
+        ];
+
         let allSeats = Object.values(filteredData).flat();
         let availableSeats = allSeats.filter(seat => !seat.occupied && !seat.hidden);
         let numSeatsToRecommend = parseInt(selectedPeople, 10);
@@ -103,42 +137,55 @@ function FlightSeats() {
         }
 
         let selectedSeats;
+
         if (requireAdjacent && numSeatsToRecommend === 2) {
+            const seatMap = {};
+            availableSeats.forEach(seat => {
+                const col = seat.seatNumber.substring(1);
+                const row = seat.seatNumber.charAt(0);
+                if (!seatMap[col]) seatMap[col] = {};
+                seatMap[col][row] = seat;
+            });
 
-            for (let i = 0; i < availableSeats.length - 1; i++) {
-                if (
-                    availableSeats[i].seatNumber.charAt(0) === availableSeats[i + 1].seatNumber.charAt(0) &&
-                    parseInt(availableSeats[i].seatNumber.substring(1)) + 1 === parseInt(availableSeats[i + 1].seatNumber.substring(1))
-                ) {
-                    selectedSeats = [availableSeats[i], availableSeats[i + 1]];
-                    break;
-                }
+            const validPairs = [];
+
+            Object.entries(seatMap).forEach(([col, rowsMap]) => {
+                allowedRowPairs.forEach(([r1, r2]) => {
+                    const seat1 = rowsMap[r1];
+                    const seat2 = rowsMap[r2];
+                    if (seat1 && seat2) {
+                        validPairs.push([seat1, seat2]);
+                    }
+                });
+            });
+
+            if (validPairs.length === 0) {
+                console.log("No valid adjacent pairs found.");
+                return;
             }
-            if (!selectedSeats) selectedSeats = availableSeats.slice(0, numSeatsToRecommend);
-        } else {
 
-            let shuffledSeats = [...availableSeats].sort(() => 0.5 - Math.random());
-            selectedSeats = shuffledSeats.slice(0, numSeatsToRecommend);
+            selectedSeats = validPairs[Math.floor(Math.random() * validPairs.length)];
+        } else {
+            let shuffled = [...availableSeats].sort(() => 0.5 - Math.random());
+            selectedSeats = shuffled.slice(0, numSeatsToRecommend);
         }
 
-
-        let updatedSeats = allSeats.map(seat =>
-            selectedSeats.some(selected => selected.id === seat.id)
+        const updatedSeats = allSeats.map(seat =>
+            selectedSeats.some(sel => sel.id === seat.id)
                 ? { ...seat, selected: true }
                 : { ...seat, selected: false }
         );
 
-
-        let updatedColumns = { A: [], B: [], C: [], D: [], E: [], F: [] };
+        const updatedRows = { A: [], B: [], C: [], D: [], E: [], F: [] };
         updatedSeats.forEach(seat => {
-            const column = seat.seatNumber.charAt(0);
-            if (updatedColumns[column]) {
-                updatedColumns[column].push(seat);
-            }
+            const row = seat.seatNumber.charAt(0);
+            updatedRows[row].push(seat);
         });
 
-        setFilteredColumns(updatedColumns);
+        setFilteredRows(updatedRows);
     };
+
+
 
     return (
         <div className="flightseat">
@@ -160,28 +207,28 @@ function FlightSeats() {
                                 cursor: selectedPeople === "2" ? "pointer" : "not-allowed"
                             }}
                         >
-                            Seats next to each other
+                            Free Seats next to each other
                         </button>
                         <button onClick={resetFilters}>Reset Filters</button>
                     </div>
 
                     <div className="seats-wrapper">
-                        {Object.keys(filteredColumns).length === 0 && <p>Loading seats...</p>}
+                        {Object.keys(filteredRows).length === 0 && <p>Loading seats...</p>}
 
-                        {Object.keys(filteredColumns).map((columnKey, index) => (
-                            <React.Fragment key={columnKey}>
+                        {Object.keys(filteredRows).map((rowKey, index) => (
+                            <React.Fragment key={rowKey}>
                                 <div className="seat-row">
-                                    {filteredColumns[columnKey]?.map(seat => (
+                                    {filteredRows[rowKey]?.map(seat => (
                                         <button
                                             key={seat.id}
-                                            className={`seat ${seat.occupied ? "occupied" : seat.selected ? "recommended-seat" : ""}`}
-                                            style={{
-                                                marginRight: "5px",
-                                                visibility: seat.hidden ? "hidden" : "visible"
-                                            }}
+                                            className={`seat 
+        ${seat.occupied ? "occupied" : ""} 
+        ${seat.selected ? "recommended-seat" : ""} 
+        ${seat.hidden ? "dimmed-seat" : ""}`}
                                         >
                                             {seat.seatNumber}
                                         </button>
+
                                     ))}
                                 </div>
                                 {index === 2 && <div className="seat-gap"></div>}

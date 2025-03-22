@@ -1,5 +1,5 @@
 /* Base Seat Styles (applies to all seats) */
-.seat, .occupied, .recommended-seat {
+.seat, .occupied, .recommended-seat .dimmed-seat {
     width: 30px; /* Ensures uniform width */
     height: 30px; /* Ensures uniform height */
     font-size: 14px; /* Consistent font size */
@@ -26,6 +26,12 @@
     color: white;
     cursor: not-allowed;
 }
+
+.dimmed-seat {
+    opacity: 0.1;
+    pointer-events: none;
+}
+
 
 /* Recommended Seat */
 .recommended-seat {
