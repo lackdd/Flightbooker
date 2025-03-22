@@ -9,7 +9,6 @@ import airplaneImage from "/src/assets/airplane_seat_map.png";
 function FlightSeats() {
     const location = useLocation();
     const flight = location.state?.flight;
-    const [seats, setSeats] = useState([]);
     const [rows, setRows] = useState([]);
 
 
@@ -52,7 +51,7 @@ function FlightSeats() {
                             <React.Fragment key={rowKey}>
                             <div className="seat-row">
                                 {rows[rowKey].map(seat => (
-                                <button key={seat.id} className="seat">
+                                <button key={seat.id} className= {seat.occupied ? "occupied" : "seat"}>
                                     {seat.seatNumber}
                                 </button>
                                 ))}
