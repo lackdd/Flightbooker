@@ -76,6 +76,49 @@ function FlightSeats() {
         recommendSeats(filteredSeats);
     }
 
+    const filterTwoFreeSeats = () => {
+        const allowedRowPairs = [
+            ["A", "B"], ["B", "C"], ["D", "E"], ["E", "F"]
+        ];
+
+         /*i'm making a seatMap of [col][rowKey] so every key would be a column number instead of row letter because this allows me to compare
+         seats vertically instead of horizontally, A1 against B1, B1 against C1 etc*/
+        const seatMap = {};
+        Object.keys(rows).forEach(rowKey => {
+            rows[rowKey].forEach(seat => {
+                const col = seat.seatNumber.substring(1);
+                if (!seatMap[col]) seatMap[col] = {}; // i need to initialize seatMap[col] but since every column has 6 row elements, i only need 1 of the six to initialize it
+                seatMap[col][rowKey] = seat;
+            });
+        });
+        const filteredSeats = {};
+        Object.keys(rows).forEach(rowKey => {
+            filteredSeats[rowKey] = rows[rowKey].map(seat => {
+                const col = seat.seatNumber.substring(1);
+                const row = seat.seatNumber.charAt(0);
+
+                /*goes through allowedRowPairs pair by pair, so aisle seats like "C", "D" wouldnt be paired and excludes the seat if its occupied
+                and checks if the other seat that it is paired with is occupied too or not*/
+                const validPair = allowedRowPairs.some(([r1, r2]) => {
+                    const pair = (row === r1 && seatMap[col]?.[r2]) || (row === r2 && seatMap[col]?.[r1]); // not really needed but otherwise ensures data integrity
+                    return pair &&
+                        !seat.occupied &&
+                        !seatMap[col][r1].occupied &&
+                        !seatMap[col][r2].occupied;
+                });
+
+                // seat is copied into filteredSeats[rowKey] and hidden if validPair was false
+                return {
+                    ...seat,
+                    hidden: !validPair
+                };
+            });
+        });
+
+        setFilteredRows(filteredSeats);
+
+    }
+
     const resetFilters = () => {
         setFilteredRows(rows);
         recommendSeats(rows);
@@ -100,6 +143,12 @@ function FlightSeats() {
                         <button onClick={() => filterSeats("nearWindow")}>Show Window seats</button>
                         <button onClick={() => filterSeats("nearExit")}>Show near Exit seats</button>
                         <button onClick={() => filterSeats("footSpace")}>Show seats with foot space</button>
+                        <button
+                            onClick={filterTwoFreeSeats}
+                            disabled={selectedPeople !== 2}
+                        >
+                            Free Seats next to each other
+                        </button>
                         <button onClick={() => resetFilters()}>Reset Filters</button>
                     </div>
                     <div>
