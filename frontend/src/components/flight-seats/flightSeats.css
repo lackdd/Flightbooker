@@ -1,9 +1,9 @@
 /*.seat {
-    color: black;
-    font-size: 20;
-    border: 1px solid #ccc;
-    marginRight: "5px";
-}*/
+     color: black;
+     font-size: 20;
+     border: 1px solid #ccc;
+     marginRight: "5px";
+ }*/
 
 /*.seat {
     width: 30px; !* Adjust width *!
@@ -37,59 +37,50 @@
     margin-bottom: 20px;
 }
 
+.seat, .occupied, .recommended-seat .dimmed-seat {
+    width: 30px; /* Ensures uniform width */
+    height: 30px; /* Ensures uniform height */
+    font-size: 14px; /* Consistent font size */
+    padding: 5px; /* Consistent padding */
+    border-radius: 4px; /* Same border radius */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    transition: all 0.2s ease-in-out;
+    margin: 3px;
+}
+
+/* Regular Seat */
 .seat {
-    width: 30px; /* Adjusted width */
-    height: 30px; /* Adjusted height */
-    font-size: 14px; /* Slightly larger font */
-    padding: 5px; /* More refined padding */
-    border-radius: 4px; /* Modern rounded corners */
-    /*border: 1px solid #888; !* Softer border color *!*/
-    /*background: linear-gradient(145deg, #B0B2B5, #909295); !* Subtle gradient *!*/
     background-color: #A5A7AA;
-    color: white; /* Text color for contrast */
-    font-weight: bold;
-    cursor: pointer; /* Indicates it's clickable */
-    /*display: flex;
-    justify-content: center;
-    align-items: center;*/
-    /*box-shadow: 3px 3px 6px #8d8f92, -3px -3px 6px #c0c2c5; !* Soft 3D effect *!*/
-    transition: all 0.2s ease-in-out;
-    margin: 3px;
+    color: white;
+    cursor: pointer;
 }
 
-/* Hover effect */
-.seat:hover {
-    background: linear-gradient(145deg, #909295, #B0B2B5); /* Reverse gradient */
-    transform: scale(1.1); /* Slight increase in size */
-    box-shadow: 3px 3px 10px #7c7e81, -3px -3px 10px #d0d2d5; /* More elevation */
-}
-
-/* Clicked (Active) Effect */
-.seat:active {
-    transform: scale(0.95); /* Small compression effect */
-    box-shadow: inset 3px 3px 6px #7c7e81, inset -3px -3px 6px #d0d2d5; /* Inner shadow */
-    /*background: #5CB85C;*/
-}
-
-/* Styling for occupied seats */
+/* Occupied Seat */
 .occupied {
-    width: 30px; /* Adjusted width */
-    height: 30px; /* Adjusted height */
-    font-size: 14px; /* Slightly larger font */
-    padding: 5px; /* More refined padding */
-    border-radius: 4px; /* Modern rounded corners */
-    /*border: 1px solid #888; !* Softer border color *!*/
-    /*background: linear-gradient(145deg, #B0B2B5, #909295); !* Subtle gradient *!*/
-    background-color: #FF0000;
-    color: white; /* Text color for contrast */
+    background-color: red;
+    color: white;
+    cursor: not-allowed;
+}
+
+.dimmed-seat {
+    opacity: 0.1;
+    pointer-events: none;
+}
+
+
+/* Recommended Seat */
+.recommended-seat {
+    background-color: green;
+    color: white;
     font-weight: bold;
-    cursor: pointer; /* Indicates it's clickable */
-    /*display: flex;
-    justify-content: center;
-    align-items: center;*/
-    /*box-shadow: 3px 3px 6px #8d8f92, -3px -3px 6px #c0c2c5; !* Soft 3D effect *!*/
-    transition: all 0.2s ease-in-out;
-    margin: 3px;
+}
+
+/* Remove Scaling on Hover */
+.seat:hover, .recommended-seat:hover, .occupied:hover {
+    transform: none;
 }
 
 /* Styling for selected seats */
@@ -98,13 +89,6 @@
     color: white;
     box-shadow: 0px 0px 8px #5CB85C;
 }
-
-.flightseat button:focus {
-    outline: 2px solid black; /* Adjust thickness & color */
-    outline-offset: 2px;
-    background: #5CB85C;
-}
-
 
 .seat-container {
     position: absolute; /* Allows precise positioning over the airplane */

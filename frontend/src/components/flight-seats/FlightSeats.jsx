@@ -10,6 +10,8 @@ function FlightSeats() {
     const location = useLocation();
     const flight = location.state?.flight;
     const [rows, setRows] = useState([]);
+    const [freeSeats, setFreeSeats] = useState([]);
+    const [filteredRows, setFilteredRows] = useState([]);
 
 
     useEffect(() => {
@@ -32,6 +34,7 @@ function FlightSeats() {
                 }
 
                 setRows(mapOfRows);
+                setFilteredRows(mapOfRows);
 
             } catch (error) {
                 console.log(error.message);
@@ -40,18 +43,40 @@ function FlightSeats() {
         getFlightSeats();
     }, []);
 
+    /*const recommendSeats = () => {
+        let allSeats = Object.values(rows).flat();
+        let freeSeats = allSeats.filter(seat => !seat.occupied);
+        let randomNumber = Math.floor(Math.random() * freeSeats.length);
+
+
+    }*/
+
+    const filterSeats = (property) => {
+        const filteredSeats = {};
+        Object.keys(rows).forEach(rowKey => {
+            filteredSeats[rowKey] = rows[rowKey].map(seat => ({
+                ...seat,
+                hidden: !seat[property]
+            }));
+        });
+        setFilteredRows(filteredSeats);
+    }
+
 
     return (
         <div className="flightseat">
             <div className="airplane-background" style={{backgroundImage: `url(${airplaneImage})`}}>
                 <div className="seat-container">
                     <h1>Select Seats for Flight {flight.flightNumber}</h1>
+                    <div className="filters">
+                        <button onClick={() => filterSeats("nearWindow")}>Show Window seats only</button>
+                    </div>
                     <div>
-                        {Object.keys(rows).map((rowKey, index) => (
+                        {Object.keys(filteredRows).map((rowKey, index) => (
                             <React.Fragment key={rowKey}>
                             <div className="seat-row">
-                                {rows[rowKey].map(seat => (
-                                <button key={seat.id} className= {seat.occupied ? "occupied" : "seat"}>
+                                {filteredRows[rowKey].map(seat => (
+                                <button key={seat.id} className= {`seat ${seat.occupied ? "occupied" : ""} ${seat.hidden ? "dimmed-seat" : ""}`}>
                                     {seat.seatNumber}
                                 </button>
                                 ))}
