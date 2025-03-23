@@ -62,6 +62,10 @@ function FlightSeats() {
         setFilteredRows(filteredSeats);
     }
 
+    const resetFilters = () => {
+        setFilteredRows(rows);
+    }
+
 
     return (
         <div className="flightseat">
@@ -72,6 +76,7 @@ function FlightSeats() {
                         <button onClick={() => filterSeats("nearWindow")}>Show Window seats</button>
                         <button onClick={() => filterSeats("nearExit")}>Show near Exit seats</button>
                         <button onClick={() => filterSeats("footSpace")}>Show seats with foot space</button>
+                        <button onClick={() => resetFilters()}>Reset Filters</button>
                     </div>
                     <div>
                         {Object.keys(filteredRows).map((rowKey, index) => (
