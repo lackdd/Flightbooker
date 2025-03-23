@@ -69,7 +69,9 @@ function FlightSeats() {
                 <div className="seat-container">
                     <h1>Select Seats for Flight {flight.flightNumber}</h1>
                     <div className="filters">
-                        <button onClick={() => filterSeats("nearWindow")}>Show Window seats only</button>
+                        <button onClick={() => filterSeats("nearWindow")}>Show Window seats</button>
+                        <button onClick={() => filterSeats("nearExit")}>Show near Exit seats</button>
+                        <button onClick={() => filterSeats("footSpace")}>Show seats with foot space</button>
                     </div>
                     <div>
                         {Object.keys(filteredRows).map((rowKey, index) => (
