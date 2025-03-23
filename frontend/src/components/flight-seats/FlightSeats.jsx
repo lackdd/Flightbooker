@@ -4,6 +4,7 @@ import React from "react";
 import axios from "axios";
 import "./FlightSeats.css";
 import airplaneImage from "/src/assets/airplane_seat_map.png";
+import {useNavigate} from "react-router-dom";
 
 
 function FlightSeats() {
@@ -12,6 +13,8 @@ function FlightSeats() {
     const [rows, setRows] = useState([]);
     const [filteredRows, setFilteredRows] = useState([]);
     const [selectedPeople, setSelectedPeople] = useState(1);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
 
@@ -193,6 +196,9 @@ function FlightSeats() {
             <div className="airplane-background" style={{backgroundImage: `url(${airplaneImage})`}}>
                 <div className="seat-container">
                     <h1>Select Seats for Flight {flight.flightNumber}</h1>
+                    <div>
+                        <button onClick={() => navigate(`/schedule`)}>Go back to flights</button>
+                    </div>
                     <h3>Select number of people</h3>
                     <div>
                         <button onClick={() => handleSelectPeople(1)}>1 person</button>

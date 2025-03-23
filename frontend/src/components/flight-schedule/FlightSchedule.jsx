@@ -142,7 +142,7 @@ function FlightSchedule() {
     useEffect(() => {
         const fetchFlights = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/api/flights")
+                const response = await axios.get(`http://localhost:8080/api/flights`)
                 const formattedFlights = response.data.map(f => ({
                     ...f,
                     startingDateTimeFormatted: formatDateTime(f.startingDateTime),
@@ -177,6 +177,7 @@ function FlightSchedule() {
         <div className="flight">
             <div className="page-container">
                 <h1 className="h1">Teretulemast Flightbooki! Palun plaanige oma lennuplaan.</h1>
+                <p style={{ color: "white" }}>Palun vajutage lennu peale, mis teile huvi pakub.</p>
                 <div className="filters">
                     <input
                         type="text"

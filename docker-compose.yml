@@ -1,0 +1,43 @@
+services:
+  booker-frontend:
+    build:
+      context: ./frontend
+    container_name: booker-frontend
+    ports:
+      - "5173:80"
+    networks:
+      - booker-net
+  booker-db:
+    image: 'postgres:17.2'
+    container_name: booker-db
+    environment:
+      POSTGRES_DB: flightbooker
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_HOST_AUTH_METHOD: md5
+      POSTGRES_INITDB_ARGS: '--encoding=UTF-8 --lc-collate=C.utf8 --lc-ctype=C.utf8'
+    command: ["postgres", "-c", "listen_addresses=*"]
+    ports:
+      - '5432:5432'
+    networks:
+      - booker-net
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d
+      - booker-data:/var/lib/postgresql/data
+  booker-backend:
+    build: ./
+    image: booker-backend
+    container_name: booker-backend
+    ports:
+      - '8080:8080'
+    networks:
+      - booker-net
+    depends_on:
+      - booker-db
+networks:
+  booker-net:
+    driver: bridge
+volumes:
+  booker-data:
+    name: booker-data
+    driver: local
