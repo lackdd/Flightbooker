@@ -12,7 +12,7 @@ function FlightSeats() {
     const [rows, setRows] = useState([]);
     const [freeSeats, setFreeSeats] = useState([]);
     const [filteredRows, setFilteredRows] = useState([]);
-
+    const [selectedPeople, setSelectedPeople] = useState(1);
 
     useEffect(() => {
 
@@ -81,12 +81,21 @@ function FlightSeats() {
         recommendSeats(rows);
     }
 
+    const handleSelectPeople = (value) => {
+        setSelectedPeople(value);
+    }
+
 
     return (
         <div className="flightseat">
             <div className="airplane-background" style={{backgroundImage: `url(${airplaneImage})`}}>
                 <div className="seat-container">
                     <h1>Select Seats for Flight {flight.flightNumber}</h1>
+                    <h3>Select number of people</h3>
+                    <div>
+                        <button onClick={() => handleSelectPeople(1)}>1 person</button>
+                        <button onClick={() => handleSelectPeople(2)}>2 people</button>
+                    </div>
                     <div className="filters">
                         <button onClick={() => filterSeats("nearWindow")}>Show Window seats</button>
                         <button onClick={() => filterSeats("nearExit")}>Show near Exit seats</button>
