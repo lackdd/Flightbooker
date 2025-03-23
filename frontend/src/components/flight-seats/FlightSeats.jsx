@@ -35,6 +35,7 @@ function FlightSeats() {
 
                 setRows(mapOfRows);
                 setFilteredRows(mapOfRows);
+                recommendSeats(mapOfRows);
 
             } catch (error) {
                 console.log(error.message);
@@ -43,13 +44,25 @@ function FlightSeats() {
         getFlightSeats();
     }, []);
 
-    /*const recommendSeats = () => {
-        let allSeats = Object.values(rows).flat();
-        let freeSeats = allSeats.filter(seat => !seat.occupied);
+    const recommendSeats = (data) => {
+        let allSeats = Object.values(data).flat();
+        let freeSeats = allSeats.filter(seat => !seat.occupied && !seat.hidden);
+        if(freeSeats.length === 0) {
+            return;
+        }
+
         let randomNumber = Math.floor(Math.random() * freeSeats.length);
-
-
-    }*/
+        let recommendedSeat = freeSeats[randomNumber];
+        const updatedSeats = allSeats.map(seat =>
+        recommendedSeat.id === seat.id ? {...seat, recommended: true} : {...seat, recommended: false}
+        );
+        const updatedRows = {A: [], B: [], C: [], D: [], E: [], F: []};
+        updatedSeats.forEach(seat => {
+            const row = seat.seatNumber.charAt(0);
+            updatedRows[row].push(seat);
+        });
+        setFilteredRows(updatedRows);
+    }
 
     const filterSeats = (property) => {
         const filteredSeats = {};
@@ -60,10 +73,12 @@ function FlightSeats() {
             }));
         });
         setFilteredRows(filteredSeats);
+        recommendSeats(filteredSeats);
     }
 
     const resetFilters = () => {
         setFilteredRows(rows);
+        recommendSeats(rows);
     }
 
 
@@ -83,7 +98,7 @@ function FlightSeats() {
                             <React.Fragment key={rowKey}>
                             <div className="seat-row">
                                 {filteredRows[rowKey].map(seat => (
-                                <button key={seat.id} className= {`seat ${seat.occupied ? "occupied" : ""} ${seat.hidden ? "dimmed-seat" : ""}`}>
+                                <button key={seat.id} className= {`seat ${seat.occupied ? "occupied" : ""} ${seat.recommended ? "recommended-seat" : ""} ${seat.hidden ? "dimmed-seat" : ""}`}>
                                     {seat.seatNumber}
                                 </button>
                                 ))}
