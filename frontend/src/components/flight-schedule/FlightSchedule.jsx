@@ -30,7 +30,7 @@ const columns = [
         cell: info => info.getValue(),
         filterFn: "includesString",
     }),
-    columnHelper.accessor('startingDateTime', {
+    columnHelper.accessor('startingDateTimeFormatted', {
         header: ({column}) => (
             <button onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                 Starting Date and
@@ -40,7 +40,7 @@ const columns = [
         cell: info => info.getValue(),
         filterFn: "includesString",
     }),
-    columnHelper.accessor('arrivalDateTime', {
+    columnHelper.accessor('arrivalDateTimeFormatted', {
         header: ({column}) => (
             <button onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                 Arrival Date and
@@ -50,8 +50,24 @@ const columns = [
         cell: info => info.getValue(),
         filterFn: "includesString",
     }),
+    columnHelper.accessor("startingDate", {
+        header: "",
+        filterFn: (row, columnId, filterValue) =>
+            row.getValue(columnId) === filterValue,
+        enableSorting: false,
+        cell: () => null,
+        enableHiding: false,
+    }),
+    columnHelper.accessor("arrivalDate", {
+        header: "",
+        filterFn: (row, columnId, filterValue) =>
+            row.getValue(columnId) === filterValue,
+        enableSorting: false,
+        cell: () => null,
+        enableHiding: false,
+    }),
     columnHelper.accessor('duration', {
-        header: ({column}) => (
+        header: ({ column }) => (
             <button onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                 Duration {column.getIsSorted() === "asc" ? "🔼" : column.getIsSorted() === "desc" ? "🔽" : ""}
             </button>
@@ -59,19 +75,34 @@ const columns = [
         cell: info => info.getValue(),
         filterFn: "includesString",
     }),
+    columnHelper.accessor("durationMinutes", {
+        header: "",
+        cell: () => null,
+        filterFn: (row, columnId, filterValue) => {
+            if (!filterValue) return true;
+            return row.getValue(columnId) <= filterValue;
+        },
+        enableSorting: false,
+        enableHiding: true,
+    }),
     columnHelper.accessor('price', {
-        header: ({column}) => (
+        header: ({ column }) => (
             <button onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                Price {column.getIsSorted === "asc" ? "🔼" : column.getIsSorted() === "desc" ? "🔽" : ""}
+                Price {column.getIsSorted() === "asc" ? "🔼" : column.getIsSorted() === "desc" ? "🔽" : ""}
             </button>
         ),
         cell: info => info.getValue() + "€",
+        sortingFn: 'basic',
         filterFn: (row, columnId, value) => {
-            // only filter if value is defined
             if (!value) return true;
-            return row.getValue(columnId) <= value;
-        },
+            const price = row.getValue(columnId);
+            return (
+                (value.min == null || price >= value.min) &&
+                (value.max == null || price <= value.max)
+            );
+        }
     }),
+
 ];
 
 function formatDateTime(isoString) {
@@ -87,7 +118,7 @@ function formatDateTime(isoString) {
 }
 
 function formatDuration(duration) {
-    let hours = Math.round(duration / 60);
+    let hours = Math.floor(duration / 60);
     let minutes = duration % 60;
     return `${hours > 0 ? hours + " Hours " : ""}${minutes > 0 ? minutes + " Minutes" : ""}`.trim();
 }
@@ -96,8 +127,17 @@ function FlightSchedule() {
     const [flights, setFlights] = useState([]);
     const [sorting, setSorting] = useState([]);
     const [columnFilters, setColumnFilters] = useState([]);
+    const [priceMin, setPriceMin] = useState();
+    const [priceMax, setPriceMax] = useState();
+
 
     const navigate = useNavigate();
+
+    const [columnVisibility, setColumnVisibility] = useState({
+        startingDate: false,
+        arrivalDate: false,
+    });
+
 
     useEffect(() => {
         const fetchFlights = async () => {
@@ -105,9 +145,12 @@ function FlightSchedule() {
                 const response = await axios.get("http://localhost:8080/api/flights")
                 const formattedFlights = response.data.map(f => ({
                     ...f,
-                    startingDateTime: formatDateTime(f.startingDateTime),
-                    arrivalDateTime: formatDateTime(f.arrivalDateTime),
-                    duration: formatDuration(f.duration)
+                    startingDateTimeFormatted: formatDateTime(f.startingDateTime),
+                    arrivalDateTimeFormatted: formatDateTime(f.arrivalDateTime),
+                    startingDate: f.startingDateTime.slice(0, 10),
+                    arrivalDate: f.arrivalDateTime.slice(0, 10),
+                    durationMinutes: f.duration,
+                    duration: formatDuration(f.duration),
                 }));
                 setFlights(formattedFlights);
                 //console.log(response.data);
@@ -124,9 +167,10 @@ function FlightSchedule() {
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
-        state: {sorting, columnFilters},
+        state: {sorting, columnFilters, columnVisibility},
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
+        onColumnVisibilityChange: setColumnVisibility,
     });
 
     return (
@@ -140,28 +184,45 @@ function FlightSchedule() {
                         onChange={(e) => table.getColumn("destination")?.setFilterValue(e.target.value)}
                     />
                     <input
-                        type="text"
-                        placeholder="Starting Date and Time"
-                        onChange={(e) => table.getColumn("startingDateTime")?.setFilterValue(e.target.value)}
+                        type="date"
+                        onChange={(e) => {
+                            table.getColumn("startingDate")?.setFilterValue(e.target.value);
+                        }}
                     />
                     <input
-                        type="text"
-                        placeholder="Arrival Date and Time"
-                        onChange={(e) => table.getColumn("arrivalDateTime")?.setFilterValue(e.target.value)}
+                        type="date"
+                        onChange={(e) => {
+                            table.getColumn("arrivalDate")?.setFilterValue(e.target.value);
+                        }}
+                    />
+
+                    <input
+                        type="number"
+                        placeholder="Max Duration (minutes)"
+                        onChange={(e) => {
+                            const value = e.target.value ? parseInt(e.target.value, 10) : undefined;
+                            table.getColumn("durationMinutes")?.setFilterValue(value);
+                        }}
                     />
                     <input
-                        type="text"
-                        placeholder="Duration"
-                        onChange={(e) => table.getColumn("duration")?.setFilterValue(e.target.value)}
+                        type="number"
+                        placeholder="Min Price (€)"
+                        onChange={(e) => {
+                            const val = e.target.value ? parseFloat(e.target.value) : undefined;
+                            setPriceMin(val);
+                            table.getColumn("price")?.setFilterValue({ min: val, max: priceMax });
+                        }}
                     />
                     <input
                         type="number"
                         placeholder="Max Price (€)"
                         onChange={(e) => {
-                            const value = e.target.value ? parseFloat(e.target.value) : undefined;
-                            table.getColumn("price")?.setFilterValue(value);
+                            const val = e.target.value ? parseFloat(e.target.value) : undefined;
+                            setPriceMax(val);
+                            table.getColumn("price")?.setFilterValue({ min: priceMin, max: val });
                         }}
                     />
+
                 </div>
                 <div className="container">
                     <table>

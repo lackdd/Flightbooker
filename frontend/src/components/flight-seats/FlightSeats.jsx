@@ -10,7 +10,6 @@ function FlightSeats() {
     const location = useLocation();
     const flight = location.state?.flight;
     const [rows, setRows] = useState([]);
-    const [freeSeats, setFreeSeats] = useState([]);
     const [filteredRows, setFilteredRows] = useState([]);
     const [selectedPeople, setSelectedPeople] = useState(1);
 
@@ -43,26 +42,6 @@ function FlightSeats() {
         };
         getFlightSeats();
     }, []);
-
-    const recommendSeats = (data) => {
-        let allSeats = Object.values(data).flat();
-        let freeSeats = allSeats.filter(seat => !seat.occupied && !seat.hidden);
-        if(freeSeats.length === 0) {
-            return;
-        }
-
-        let randomNumber = Math.floor(Math.random() * freeSeats.length);
-        let recommendedSeat = freeSeats[randomNumber];
-        const updatedSeats = allSeats.map(seat =>
-        recommendedSeat.id === seat.id ? {...seat, recommended: true} : {...seat, recommended: false}
-        );
-        const updatedRows = {A: [], B: [], C: [], D: [], E: [], F: []};
-        updatedSeats.forEach(seat => {
-            const row = seat.seatNumber.charAt(0);
-            updatedRows[row].push(seat);
-        });
-        setFilteredRows(updatedRows);
-    }
 
     const filterSeats = (property) => {
         const filteredSeats = {};
@@ -116,7 +95,84 @@ function FlightSeats() {
         });
 
         setFilteredRows(filteredSeats);
+        recommendSeats(filteredSeats, true)
+    }
 
+    const recommendSeats = (data, nextToEachOther = false) => {
+        let allSeats = Object.values(data).flat();
+        let freeSeats = allSeats.filter(seat => !seat.occupied && !seat.hidden);
+        if(freeSeats.length === 0) {
+            return;
+        }
+
+        let recommendedSeats;
+
+        if (nextToEachOther && selectedPeople === 2) {
+
+            // Borrow a lot of logic from FilterTwoFreeSeats function
+            const allowedRowPairs = [
+                ["A", "B"], ["B", "C"],
+                ["D", "E"], ["E", "F"]
+            ];
+
+            const seatMap = {};
+            freeSeats.forEach(seat => {
+                const col = seat.seatNumber.substring(1);
+                const row = seat.seatNumber.charAt(0);
+                if (!seatMap[col]) seatMap[col] = {};
+                seatMap[col][row] = seat;
+            });
+
+            const validPairs = [];
+
+            Object.entries(seatMap).forEach(([col, rowsMap]) => {
+                allowedRowPairs.forEach(([r1, r2]) => {
+                    const seat1 = rowsMap[r1];
+                    const seat2 = rowsMap[r2];
+                    if (seat1 && seat2) {
+                        validPairs.push([seat1, seat2]);
+                    }
+                });
+            });
+
+            if (validPairs.length === 0) {
+                console.log("No valid pairs");
+
+                // get rid of earlier recommendations
+                const clearedSeats = allSeats.map(seat => ({
+                    ...seat,
+                    recommended: false
+                }));
+
+                const updatedRows = {A: [], B: [], C: [], D: [], E: [], F: []};
+                clearedSeats.forEach(seat => {
+                    const row = seat.seatNumber.charAt(0);
+                    updatedRows[row].push(seat);
+                });
+                setFilteredRows(updatedRows);
+                return;
+            }
+
+            recommendedSeats = validPairs[Math.floor(Math.random() * validPairs.length)];
+        } else {
+            let shuffled = [...freeSeats].sort(() => 0.5 - Math.random());
+            recommendedSeats = shuffled.slice(0, selectedPeople);
+        }
+
+        const selectedSeats = Array.isArray(recommendedSeats) ? recommendedSeats : [recommendedSeats];
+
+        const updatedSeats = allSeats.map(seat =>
+            selectedSeats.some(sel => sel.id === seat.id)
+                ? { ...seat, recommended: true }
+                : { ...seat, recommended: false }
+        );
+
+        const updatedRows = {A: [], B: [], C: [], D: [], E: [], F: []};
+        updatedSeats.forEach(seat => {
+            const row = seat.seatNumber.charAt(0);
+            updatedRows[row].push(seat);
+        });
+        setFilteredRows(updatedRows);
     }
 
     const resetFilters = () => {
@@ -128,6 +184,9 @@ function FlightSeats() {
         setSelectedPeople(value);
     }
 
+    useEffect(() => {
+        recommendSeats(filteredRows, selectedPeople === 2);
+    }, [selectedPeople]);
 
     return (
         <div className="flightseat">

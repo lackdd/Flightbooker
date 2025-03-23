@@ -92,7 +92,7 @@
 
 .seat-container {
     position: absolute; /* Allows precise positioning over the airplane */
-    top: 46%; /* Adjust based on plane image */
+    top: 36%; /* Adjust based on plane image */
     left: 49%; /* Adjust to match the plane */
     transform: translate(-50%, -50%); /* Centers the grid */
     display: flex;
