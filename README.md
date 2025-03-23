@@ -1,3 +1,8 @@
+Programmi tööle panemiseks kirjutage palun projekti directory-s olles terminali: docker-compose up --build
+Programmi saab vaadata lehel: http://localhost:5173
+
+
+
 1) Alustasin sellega, et seadsin spring booti, vite ja postgreSQL üles
 2) Lisasin algul dotenv library, et .env file-st databaasi andmed spring booti sisse lugeda, siis ta ei lae neid andmeid remote repo-sse ja selles mõttes ohutum
 3) Sihin fullstack arendajaks, aga eelistan backendi, selletõttu alustasin backendist- tegin Flight entity, määrasin talle erinevad variable-id nagu flightNumber, startingLocation, destination, price, duration jne
@@ -35,3 +40,4 @@
     istmekohad on kõrvuti, vaatab paare ja kontrollib, kas istekoht paaris on hõivatud või paarilise istekoht, kui ei ole, siis istekoht ei ole filtreeritud, kui on üks paari istmetest hõivatud, siis on filtreeritud
 28) Lisasin kahe inimese soovitamise, natuke pidi loogikat ümber tegema, nt, et nüüd ei ole ühte random numbrit vaja, vaid kasutan slice-i ja suhffle-i abi, palju loogikat kordub FilterTwoFreeSeats-ist
 29) Fixisin buge, tegin natuke react tabeli ümber, et kasutaks date type-i, numbreid durationi jaoks
+30) Lisasin projekti Docker-isse
